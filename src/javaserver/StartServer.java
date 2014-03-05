@@ -10,10 +10,9 @@ public class StartServer {
         // Get options from command-line arguments
         ArgsParser options = new ArgsParser(args);
         int port = options.parsePort();
-//        String directory = options.parseDirectory();
+        String directory = options.parseDirectory();
 
-        Server server = new Server(port);
+        Server server = new Server(port, directory);
         server.start();
-
     }
 }

@@ -6,16 +6,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-
 /**
  * Created by Taryn on 3/3/14.
  */
 public class Server {
     protected int port;
+    protected String directory;
 
-    public Server(int port) {
+    public Server(int port, String directory) {
         this.port = port;
+        this.directory = directory;
     }
 
     public void start() throws IOException {
@@ -28,8 +28,7 @@ public class Server {
                 BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 System.out.println("New thread started on port " + port);
 
-                HashMap<String, String> parsedRequest = new RequestParser(input).parseRequest();
-                RequestHandler requestHandler = new RequestHandler(parsedRequest);
+                RequestHandler requestHandler = new RequestHandler(new RequestParser(input), this.directory);
 
                 byte[] response = requestHandler.getResponse();
                 DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());

@@ -32,7 +32,7 @@ public class ArgsParser {
             directory = cliArgs[3];
 
         } else {
-            directory = "none";
+            directory = "/Users/Taryn/8thLight/cob_spec/public/";
         }
 
         return directory;

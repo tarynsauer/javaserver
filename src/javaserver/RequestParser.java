@@ -1,39 +1,37 @@
 package javaserver;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 /**
  * Created by Taryn on 3/4/14.
  */
 public class RequestParser {
     private BufferedReader clientRequest;
+    private String request;
 
     public RequestParser(BufferedReader clientRequest) throws IOException {
         this.clientRequest = clientRequest;
+        this.request = parseRequest();
     }
 
-    public HashMap<String, String> parseRequest() throws IOException {
-        String line = "";
+    public String getRequest() {
+        return this.request;
+    }
+
+    public String parseRequest() throws IOException {
+        String line;
         StringBuilder stringBuilder = new StringBuilder();
-        HashMap<String, String> parsedRequest = new HashMap<String, String>();
 
-
-        while((line = clientRequest.readLine()) != null){
+        while(!(line = clientRequest.readLine()).equals("")){
             stringBuilder.append(line);
         }
-
-        parsedRequest.put("method", getMethod(stringBuilder.toString()));
-        parsedRequest.put("uri", getRequestURI(stringBuilder.toString()));
-        return parsedRequest;
+        return stringBuilder.toString();
     }
 
-    protected String getMethod(String input) throws IOException {
-        String method = input.toString().split(" ")[0];
-        return method;
+    protected String getMethod() throws IOException {
+        return request.split(" ")[0];
     }
 
-    protected String getRequestURI(String input) throws IOException {
-        String method = input.toString().split(" ")[1];
-        return method;
+    protected String getRequestURI() throws IOException {
+        return request.split(" ")[1];
     }
 }
