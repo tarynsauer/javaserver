@@ -1,7 +1,6 @@
 package javaserver;
 
 import java.io.IOException;
-import java.io.File;
 /**
  * Created by Taryn on 3/4/14.
  */
@@ -15,24 +14,31 @@ public class RequestHandler {
     }
 
     public byte[] getResponse() throws IOException {
+        String response;
         String uri = parser.getRequestURI();
             if (uri.equals("/")) {
-                return getResponseString("200 OK", "");
+                response = new RootResponse().getResponseMessage("200 OK", "root");
             } else if (uri.equals("/foobar")) {
-                return getResponseString("404 Not Found", "Oops: 404 Not Found");
+                response = new NotFoundResponse().getResponseMessage("404 Not Found", "Boo! 404 Not Found");
+            } else if (uri.equals("/file1")) {
+                response = new RootResponse().getResponseMessage("200 OK", "file1");
+            } else if (uri.equals("/file2")) {
+                response = new RootResponse().getResponseMessage("200 OK", "file2");
+            } else if (uri.equals("/image.gif")) {
+                response = new ImageResponse().getResponseMessage("200 OK", "image.gif");
+            } else if (uri.equals("/image.jpeg")) {
+                response = new ImageResponse().getResponseMessage("200 OK", "image.jpeg");
+            } else if (uri.equals("/image.png")) {
+                response = new ImageResponse().getResponseMessage("200 OK", "image.png");
+            } else if (uri.equals("/partial_content.txt")) {
+                response = new RootResponse().getResponseMessage("200 OK", "partial_content.txt");
+            } else if (uri.equals("/text-file.txt")) {
+                response = new RootResponse().getResponseMessage("200 OK", "text-file.txt");
             } else {
-                return getResponseString("200 OK", "");
+                response = new RootResponse().getResponseMessage("200 OK", "Hmm...I should say something here.");
             }
+        return response.getBytes();
         }
-
-    private void getLinks() {
-    }
-
-    public byte[] getResponseString(String status, String body) {
-        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo() + getBody(body);
-        byte[] output = response.getBytes();
-        return output;
-    }
 
     public String getStatusLine(String status) {
         return "HTTP/1.1 " + status +  "\r\n";
@@ -48,31 +54,4 @@ public class RequestHandler {
         return "Server: Taryn's Java Server\r\n";
     }
 
-    public String getContentTypeInfo() {
-        return "Content-Type: text/html; charset=UTF-8\r\n\r\n";
-    }
-
-    public String getBody(String contents) {
-        String bodyBegin = "<title>Taryn's Website</title>\n" +
-                "</head>\n" +
-                "<body>\n";
-        String bodyEnd = "</body>\n" +
-                "</html>";
-        if (contents.equals("")) {
-            File directory = new File("/Users/Taryn/8thLight/cob_spec/public/");
-            File[] fileListing = directory.listFiles();
-            String bodyMiddle = "Hello, World.\n" + listFiles(fileListing);
-            return bodyBegin + bodyMiddle + bodyEnd;
-        } else {
-            return bodyBegin + "<h1>" + contents + "</h1>" + bodyEnd;
-        }
-    }
-
-    public String listFiles(File[] files) {
-        String fileList = "<ul>";
-        for (File file : files) {
-          fileList += "<li><a href=\"/" + file.getAbsolutePath() + "\">" + file.getName() + "</a></li>";
-        }
-        return fileList + "</ul>";
-    }
 }
