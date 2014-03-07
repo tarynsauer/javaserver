@@ -1,20 +1,31 @@
 package javaserver;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-
 /**
  * Created by Taryn on 3/6/14.
  */
 public class ImageResponse extends AbstractResponse {
 
     @Override
-    String getResponseMessage(String status, String fileName) throws FileNotFoundException {
+    byte[] getResponseMessage(String status, String fileName) throws IOException {
         String contentType = getContentTypeString(fileName);
-        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo(contentType) + getContentTypeInfo(fileName) + getImage(fileName);
-        return response;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getStatusLine(status));
+        stringBuilder.append(getDateInfo());
+        stringBuilder.append(getServerInfo());
+        stringBuilder.append(getContentTypeInfo(contentType));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(stringBuilder.toString().getBytes());
+            outputStream.write(getImage(fileName));
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return outputStream.toByteArray();
     }
 
     String getContentTypeString(String fileName) {
@@ -32,18 +43,18 @@ public class ImageResponse extends AbstractResponse {
         return null;
     }
 
-    private String getImage(String fileName) throws FileNotFoundException {
+    private byte[] getImage(String fileName) throws IOException {
         File filePath = new File("/Users/Taryn/8thLight/cob_spec/public/" + fileName);
-        byte[] fileContents = new byte[(int)filePath.length()];
-        FileInputStream fis = new FileInputStream(filePath);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] fileData = new byte[(int)filePath.length()];
         try {
-            outputStream.write(fileContents);
-            outputStream.close();
-        } catch (IOException e) {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            fileInputStream.read(fileData);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return outputStream.toString();
+        return fileData;
+
     }
 
 }

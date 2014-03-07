@@ -5,8 +5,9 @@ package javaserver;
  */
 public class NotFoundResponse extends AbstractResponse {
 
-    public String getResponseMessage(String status, String condition) {
-        return getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody(condition);
+    public byte[] getResponseMessage(String status, String condition) {
+        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody(condition);
+        return response.getBytes();
     }
 
     @Override

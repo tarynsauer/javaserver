@@ -14,8 +14,10 @@ public class RequestHandler {
     }
 
     public byte[] getResponse() throws IOException {
-        String response;
+        byte[] response;
+        String method = parser.getMethod();
         String uri = parser.getRequestURI();
+        String authentication = parser.getAuthentication();
             if (uri.equals("/")) {
                 response = new RootResponse().getResponseMessage("200 OK", "root");
             } else if (uri.equals("/foobar")) {
@@ -29,15 +31,19 @@ public class RequestHandler {
             } else if (uri.equals("/image.jpeg")) {
                 response = new ImageResponse().getResponseMessage("200 OK", "image.jpeg");
             } else if (uri.equals("/image.png")) {
-                response = new ImageResponse().getResponseMessage("200 OK", "image.png");
+                response = new ImageResponse().getResponseMessage("206 OK", "image.png");
             } else if (uri.equals("/partial_content.txt")) {
-                response = new RootResponse().getResponseMessage("200 OK", "partial_content.txt");
+                response = new RootResponse().getResponseMessage("206 Partial Content", "partial_content.txt");
             } else if (uri.equals("/text-file.txt")) {
                 response = new RootResponse().getResponseMessage("200 OK", "text-file.txt");
+            } else if (uri.startsWith("/logs")) {
+                response = new AuthenticationResponse().getResponseMessage("401 Unauthorized", authentication);
+            } else if (uri.startsWith("/method_options")) {
+                response = new MethodOptionsResponse().getResponseMessage("200 OK", "These are your options:");
             } else {
                 response = new RootResponse().getResponseMessage("200 OK", "Hmm...I should say something here.");
             }
-        return response.getBytes();
+        return response;
         }
 
     public String getStatusLine(String status) {

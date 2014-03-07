@@ -1,13 +1,13 @@
 package javaserver;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Created by Taryn on 3/4/14.
  */
 public abstract class AbstractResponse {
     abstract String getBody(String condition);
-    abstract String getResponseMessage(String status, String condition) throws FileNotFoundException;
+    abstract byte[] getResponseMessage(String status, String condition) throws IOException;
 
     public static String getStatusLine(String status) {
         return "HTTP/1.1 " + status +  "\r\n";
@@ -23,7 +23,7 @@ public abstract class AbstractResponse {
     }
 
     public String getContentTypeInfo(String contentType) {
-        return "Content-Type: text/html; charset=UTF-8\r\n\r\n";
+        return "Content-Type: " + contentType + "; charset=UTF-8\r\n\r\n";
     }
 
 }

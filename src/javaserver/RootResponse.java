@@ -10,8 +10,9 @@ public class RootResponse extends AbstractResponse {
     private String directoryPath = "/Users/Taryn/8thLight/cob_spec/public/";
 
     @Override
-    public String getResponseMessage(String status, String condition) {
-        return getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody(condition);
+    public byte[] getResponseMessage(String status, String condition) {
+        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody(condition);
+        return response.getBytes();
     }
 
     @Override

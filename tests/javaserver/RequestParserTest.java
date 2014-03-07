@@ -18,7 +18,7 @@ public class RequestParserTest {
 
     @Before
     public void setUp() throws Exception {
-       str = "GET /logs HTTP/1.1Host: localhost:5000Connection: keep-aliveAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*";
+       str = "GET /logs HTTP/1.1Host: localhost:5000Connection: Authorization: Basic 1234==";
        byte[] data = str.getBytes();
        InputStream input = new ByteArrayInputStream(data);
        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
@@ -26,7 +26,7 @@ public class RequestParserTest {
     }
 
     @Test
-    public void testParseRequestReturnsHashMapOfValues() throws Exception {
+    public void testParseRequestReturnsParsedString() throws Exception {
         assertEquals(str, requestParser.getRequest());
     }
 
@@ -39,4 +39,6 @@ public class RequestParserTest {
     public void testGetRequestURIReturnsString() throws Exception {
         assertEquals("/logs", requestParser.getRequestURI());
     }
+
+
 }
