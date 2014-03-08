@@ -33,7 +33,7 @@ public class RootResponse extends AbstractResponse {
         } else if (condition.equals("text-file.txt")) {
             return bodyBegin + getFileContents(directoryPath + "text-file.txt") + bodyEnd;
         } else {
-            return "";
+            return bodyBegin + "<h1>" + condition + "</h1>" + listFiles(fileListing) + bodyEnd;
         }
     }
 

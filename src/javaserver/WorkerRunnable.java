@@ -1,35 +1,42 @@
 package javaserver;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 /**
 
  */
-public class WorkerRunnable implements Runnable{
+public class WorkerRunnable implements Runnable {
+    private final Socket clientSocket;
+    private final String directory;
+    private BufferedReader input;
 
-    protected Socket clientSocket = null;
-
-    public WorkerRunnable(Socket clientSocket) {
+    public WorkerRunnable(Socket clientSocket, String directory, BufferedReader input) {
         this.clientSocket = clientSocket;
+        this.directory = directory;
+        this.input = input;
     }
 
     public void run() {
         try {
-            InputStream input  = clientSocket.getInputStream();
-            OutputStream output = clientSocket.getOutputStream();
-            long time = System.currentTimeMillis();
-            output.write(("HTTP/1.1 200 OK\n\nWorkerRunnable: " +
-                    time +
-                    "").getBytes());
-            output.close();
-            input.close();
-            System.out.println("Request processed: " + time);
+            byte[] response = getResponse();
+            provideResponseForClient(response);
         } catch (IOException e) {
-            //report exception somewhere.
+            System.out.println("Request could not be processed.");
             e.printStackTrace();
         }
     }
+
+    private byte[] getResponse() throws IOException {
+        RequestHandler requestHandler = new RequestHandler(new RequestParser(input), directory);
+        return requestHandler.getResponse();
+    }
+
+    private void provideResponseForClient(byte[] response) throws IOException {
+        DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
+        output.write(response);
+        output.close();
+        input.close();
+    }
+
 }

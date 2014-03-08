@@ -9,22 +9,26 @@ public class AuthenticationResponse extends AbstractResponse {
 
     @Override
     String getBody(String condition) {
-        return "<h1>" + condition + "</h1>";
+        return condition;
     }
 
     @Override
     byte[] getResponseMessage(String status, String authentication) throws IOException {
         if ((valid(authentication))) {
-            String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody("Authentication required");;
+            String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody("" +
+                    "<h1>Logs</h1>" +
+                    "<p>GET /log HTTP/1.1</p>" +
+                    "<p>PUT /these HTTP/1.1</p>" +
+                    "<p>HEAD /requests HTTP/1.1</p>");
             return response.getBytes();
         } else {
-            String response = getStatusLine(status) + getDateInfo()  + getAuthenticateHeader() + getServerInfo() + getContentTypeInfo("text/html") + getBody("Logs");
+            String response = getStatusLine(status) + getDateInfo()  + getAuthenticateHeader() + getServerInfo() + getContentTypeInfo("text/html") + getBody("<h1>Authentication required</h1>");
             return response.getBytes();
         }
     }
 
     private String getAuthenticateHeader() {
-        return "WWW-Authenticate: Basic realm=\"You must log in to view Logs\"\r\n";
+        return "WWW-Authenticate: Basic realm=\"Authentication required for Logs\"\r\n";
     }
 
     private boolean valid(String authentication) {
