@@ -58,6 +58,8 @@ public class RequestHandler {
                 response = new RootResponse().getResponseMessage("200 OK", "HEAD /requests HTTP/1.1");
             } else if (uri.startsWith("/method_options")) {
                 response = new MethodOptionsResponse().getResponseMessage("200 OK", "These are your options:");
+            } else if (uri.startsWith("/redirect")) {
+                response = new RedirectResponse().getResponseMessage("302 Moved Permanently", "/");
             } else {
                 response = new RootResponse().getResponseMessage("200 OK", "Hmm...I should say something here.");
             }

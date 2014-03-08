@@ -23,7 +23,7 @@ public abstract class AbstractResponse {
     }
 
     public String getContentTypeInfo(String contentType) {
-        return "Content-Type: " + contentType + "; charset=UTF-8\r\n\r\n";
+        return "Content-Type: " + contentType + "\r\n\r\n";
     }
 
 }

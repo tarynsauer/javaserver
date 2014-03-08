@@ -6,10 +6,14 @@ import java.io.IOException;
  * Created by Taryn on 3/7/14.
  */
 public class FormResponse extends AbstractResponse {
-    private String dataValue = "cosby";
+    private static String dataValue = "";
 
     public void setDataValue(String value) {
-        this.dataValue = value;
+        dataValue = value;
+    }
+
+    public String getDataValue() {
+        return dataValue;
     }
 
     @Override
@@ -21,7 +25,7 @@ public class FormResponse extends AbstractResponse {
         } else if (method.equals("DELETE")) {
             setDataValue("");
         }
-        return "<p data = " + dataValue + ">There may be a hidden name value here.</p>";
+        return "<p data = " + getDataValue() + ">There may be a hidden name value here.</p>";
     }
 
     @Override
