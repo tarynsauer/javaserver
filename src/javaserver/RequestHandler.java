@@ -50,6 +50,8 @@ public class RequestHandler {
                 }
             } else if ((uri.equals("/form"))) {
                 response = formResponse.getResponseMessage("200 OK", method);
+            } else if (uri.startsWith("/parameters?")) {
+                response = new ParameterDecodeResponse().getResponseMessage("200 OK", uri);
             } else if (uri.startsWith("/logs")) {
                 response = new AuthenticationResponse().getResponseMessage("401 Unauthorized", authentication);
             } else if ((uri.equals("/these")) && method.equals("PUT")) {
