@@ -7,7 +7,7 @@ import java.io.IOException;
  */
 public abstract class AbstractResponse {
     abstract String getBody(String condition);
-    abstract byte[] getResponseMessage(String status, String condition) throws IOException;
+    abstract byte[] getResponseMessage(RequestParser parser) throws IOException;
 
     public static String getStatusLine(String status) {
         return "HTTP/1.1 " + status +  "\r\n";

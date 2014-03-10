@@ -9,11 +9,12 @@ import java.io.IOException;
 public class ImageResponse extends AbstractResponse {
 
     @Override
-    byte[] getResponseMessage(String status, String fileName) throws IOException {
+    byte[] getResponseMessage(RequestParser parser) throws IOException {
+        String fileName = parser.getRequestURI();
         String contentType = getContentTypeString(fileName);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getStatusLine(status));
+        stringBuilder.append(getStatusLine("200 OK"));
         stringBuilder.append(getDateInfo());
         stringBuilder.append(getServerInfo());
         stringBuilder.append(getContentTypeInfo(contentType));
@@ -29,9 +30,9 @@ public class ImageResponse extends AbstractResponse {
     }
 
     String getContentTypeString(String fileName) {
-        if (fileName.equals("image.gif")) {
+        if (fileName.equals("/image.gif")) {
             return "image/gif";
-        } else if (fileName.equals("image.jpeg")) {
+        } else if (fileName.equals("/image.jpeg")) {
             return "image/jpeg";
         } else {
             return "image/png";
@@ -44,7 +45,7 @@ public class ImageResponse extends AbstractResponse {
     }
 
     private byte[] getImage(String fileName) throws IOException {
-        File filePath = new File("/Users/Taryn/8thLight/cob_spec/public/" + fileName);
+        File filePath = new File("/Users/Taryn/8thLight/cob_spec/public" + fileName);
         byte[] fileData = new byte[(int)filePath.length()];
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath);

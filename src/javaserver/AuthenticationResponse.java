@@ -13,7 +13,8 @@ public class AuthenticationResponse extends AbstractResponse {
     }
 
     @Override
-    byte[] getResponseMessage(String status, String authentication) throws IOException {
+    byte[] getResponseMessage(RequestParser parser) throws IOException {
+        String authentication = parser.getAuthentication();
         if ((valid(authentication))) {
             String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody("" +
                     "<h1>Logs</h1>" +
@@ -22,7 +23,7 @@ public class AuthenticationResponse extends AbstractResponse {
                     "<p>HEAD /requests HTTP/1.1</p>");
             return response.getBytes();
         } else {
-            String response = getStatusLine(status) + getDateInfo()  + getAuthenticateHeader() + getServerInfo() + getContentTypeInfo("text/html") + getBody("<h1>Authentication required</h1>");
+            String response = getStatusLine("401 Unauthorized") + getDateInfo()  + getAuthenticateHeader() + getServerInfo() + getContentTypeInfo("text/html") + getBody("<h1>Authentication required</h1>");
             return response.getBytes();
         }
     }

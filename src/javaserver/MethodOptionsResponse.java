@@ -12,8 +12,8 @@ public class MethodOptionsResponse extends AbstractResponse {
     }
 
     @Override
-    byte[] getResponseMessage(String status, String condition) throws IOException {
-        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getResponseHeaderAllows() + getContentTypeInfo("text/html") + getBody(condition);
+    byte[] getResponseMessage(RequestParser parser) throws IOException {
+        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getResponseHeaderAllows() + getContentTypeInfo("text/html") + getBody("These are your options:");
         return response.getBytes();
     }
 

@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 /**
@@ -18,7 +20,7 @@ public class RequestParserTest {
 
     @Before
     public void setUp() throws Exception {
-       str = "GET /logs HTTP/1.1Host: localhost:5000Connection: Authorization: Basic 1234==";
+       str = "GET /logs?first_name=John&last_name=Doe&action=Submit HTTP/1.1Host: localhost:5000Connection: Authorization: Basic 1234==";
        byte[] data = str.getBytes();
        InputStream input = new ByteArrayInputStream(data);
        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
@@ -36,9 +38,21 @@ public class RequestParserTest {
     }
 
     @Test
+    public void testGetQueryString() throws Exception {
+        assertEquals("first_name=John&last_name=Doe&action=Submit", requestParser.getQueryString());
+    }
+
+    @Test
+    public void testGetParameters() throws Exception {
+        Map<String,String> expectedResult= new HashMap<String, String>();
+        expectedResult.put("first_name", "John");
+        expectedResult.put("last_name", "Doe");
+        expectedResult.put("action", "Submit");
+        assertEquals(expectedResult, requestParser.getParameters());
+    }
+
+    @Test
     public void testGetRequestURIReturnsString() throws Exception {
         assertEquals("/logs", requestParser.getRequestURI());
     }
-
-
 }

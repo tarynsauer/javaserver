@@ -5,15 +5,15 @@ package javaserver;
  */
 public class NotFoundResponse extends AbstractResponse {
 
-    public byte[] getResponseMessage(String status, String condition) {
-        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody(condition);
+    public byte[] getResponseMessage(RequestParser parser) {
+        String response = getStatusLine("404 Not Found") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody("404 Not Found");
         return response.getBytes();
     }
 
     @Override
     public String getBody(String condition) {
         String bodyBegin = "<title>Taryn's Website</title>\n" + "</head>\n" + "<body>\n";
-        String bodyMiddle = "<h1>404 Not Found</h1>";
+        String bodyMiddle = "<h1>" + condition + "</h1>";
         return bodyBegin + bodyMiddle + "</body>\n" + "</html>";
     }
 }

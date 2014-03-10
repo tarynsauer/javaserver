@@ -12,8 +12,8 @@ public class MethodNotAllowedResponse extends AbstractResponse {
     }
 
     @Override
-    byte[] getResponseMessage(String status, String condition) throws IOException {
-        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody(condition);
+    byte[] getResponseMessage(RequestParser parser) throws IOException {
+        String response = getStatusLine("405 Method Not Allowed") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody("none");
         return response.getBytes();
     }
 }

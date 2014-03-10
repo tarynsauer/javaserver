@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.HashMap;
 /**
  * Created by Taryn on 3/4/14.
  */
@@ -55,5 +57,27 @@ public class RequestParser {
         } else {
             return null;
         }
+    }
+
+    public String getQueryString() {
+        String match = null;
+        Pattern pattern = Pattern.compile("\\?(.*?) ");
+        Matcher matcher = pattern.matcher(request);
+        if (matcher.find()) {
+            match = matcher.group(1);
+        }
+        return match;
+    }
+
+    public Map<String, String> getParameters() {
+        String queryString = getQueryString();
+        String[] parametersList = queryString.split("&");
+
+        Map<String,String> allParameters= new HashMap<String, String>();
+        for (String parameter : parametersList) {
+            String[] keyValPair = parameter.split("=");
+            allParameters.put(keyValPair[0], keyValPair[1]);
+        }
+        return allParameters;
     }
 }

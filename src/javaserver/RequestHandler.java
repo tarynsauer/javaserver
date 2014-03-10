@@ -20,50 +20,45 @@ public class RequestHandler {
         byte[] response;
         String method = parser.getMethod();
         String uri = parser.getRequestURI();
-        String authentication = parser.getAuthentication();
 
             if (uri.equals("/")) {
-                response = new RootResponse().getResponseMessage("200 OK", "root");
+                response = new RootResponse().getResponseMessage(parser);
             } else if (uri.equals("/foobar")) {
-                response = new NotFoundResponse().getResponseMessage("404 Not Found", "Boo! 404 Not Found");
+                response = new NotFoundResponse().getResponseMessage(parser);
             } else if (uri.equals("/file1")) {
                 if (!(method.equals("GET"))) {
-                    response = new MethodNotAllowedResponse().getResponseMessage("405 Method Not Allowed", "file1");
+                    response = new MethodNotAllowedResponse().getResponseMessage(parser);
                 } else {
-                    response = new RootResponse().getResponseMessage("200 OK", "file1");
+                    response = new RootResponse().getResponseMessage(parser);
                 }
             } else if (uri.equals("/file2")) {
-                response = new RootResponse().getResponseMessage("200 OK", "file2");
+                response = new RootResponse().getResponseMessage(parser);
             } else if (uri.equals("/image.gif")) {
-                response = new ImageResponse().getResponseMessage("200 OK", "image.gif");
+                response = new ImageResponse().getResponseMessage(parser);
             } else if (uri.equals("/image.jpeg")) {
-                response = new ImageResponse().getResponseMessage("200 OK", "image.jpeg");
+                response = new ImageResponse().getResponseMessage(parser);
             } else if (uri.equals("/image.png")) {
-                response = new ImageResponse().getResponseMessage("206 OK", "image.png");
+                response = new ImageResponse().getResponseMessage(parser);
             } else if (uri.equals("/partial_content.txt")) {
-                response = new PartialResponse().getResponseMessage("206 Partial Content", "partial_content.txt");
+                response = new PartialResponse().getResponseMessage(parser);
             } else if (uri.equals("/text-file.txt")) {
                 if (!(method.equals("GET"))) {
-                    response = new MethodNotAllowedResponse().getResponseMessage("405 Method Not Allowed", "text-file.txt");
+                    response = new MethodNotAllowedResponse().getResponseMessage(parser);
                 } else {
-                    response = new RootResponse().getResponseMessage("200 OK", "text-file.txt");
+                    response = new RootResponse().getResponseMessage(parser);
                 }
             } else if ((uri.equals("/form"))) {
-                response = formResponse.getResponseMessage("200 OK", method);
+                response = formResponse.getResponseMessage(parser);
             } else if (uri.startsWith("/parameters?")) {
-                response = new ParameterDecodeResponse().getResponseMessage("200 OK", uri);
+                response = new ParameterDecodeResponse().getResponseMessage(parser);
             } else if (uri.startsWith("/logs")) {
-                response = new AuthenticationResponse().getResponseMessage("401 Unauthorized", authentication);
-            } else if ((uri.equals("/these")) && method.equals("PUT")) {
-                response = new RootResponse().getResponseMessage("200 OK", "PUT /these HTTP/1.1");
-            } else if ((uri.equals("/requests")) && method.equals("HEAD")) {
-                response = new RootResponse().getResponseMessage("200 OK", "HEAD /requests HTTP/1.1");
+                response = new AuthenticationResponse().getResponseMessage(parser);
             } else if (uri.startsWith("/method_options")) {
-                response = new MethodOptionsResponse().getResponseMessage("200 OK", "These are your options:");
+                response = new MethodOptionsResponse().getResponseMessage(parser);
             } else if (uri.startsWith("/redirect")) {
-                response = new RedirectResponse().getResponseMessage("302 Moved Permanently", "/");
+                response = new RedirectResponse().getResponseMessage(parser);
             } else {
-                response = new RootResponse().getResponseMessage("200 OK", "Hmm...I should say something here.");
+                response = new RootResponse().getResponseMessage(parser);
             }
         return response;
         }
@@ -74,8 +69,7 @@ public class RequestHandler {
 
     public String getDateInfo() {
         java.util.Date date= new java.util.Date();
-        String dateString = "Date: " + date.toString() + "\r\n";
-        return dateString;
+        return"Date: " + date.toString() + "\r\n";
     }
 
     public String getServerInfo() {

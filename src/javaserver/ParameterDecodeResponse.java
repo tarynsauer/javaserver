@@ -15,8 +15,8 @@ public class ParameterDecodeResponse extends AbstractResponse {
     }
 
     @Override
-    byte[] getResponseMessage(String status, String url) throws IOException {
-        String response = getStatusLine(status) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getQueries(url);
+    byte[] getResponseMessage(RequestParser parser) throws IOException {
+        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getQueries(parser.getRequest());
         return response.getBytes();
     }
 
