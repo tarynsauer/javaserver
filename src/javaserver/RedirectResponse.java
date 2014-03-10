@@ -6,10 +6,6 @@ import java.io.IOException;
  * Created by Taryn on 3/8/14.
  */
 public class RedirectResponse extends AbstractResponse {
-    @Override
-    String getBody(String condition) {
-        return null;
-    }
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
@@ -17,7 +13,7 @@ public class RedirectResponse extends AbstractResponse {
         return response.getBytes();
     }
 
-    String getLocation(String condition) {
-        return "Location: " + condition + "\r\n";
+    String getLocation(String uri) {
+        return "Location: http://localhost:5000/\r\n";
     }
 }

@@ -49,7 +49,7 @@ public class RequestHandler {
                 }
             } else if ((uri.equals("/form"))) {
                 response = formResponse.getResponseMessage(parser);
-            } else if (uri.startsWith("/parameters?")) {
+            } else if (uri.startsWith("/parameters")) {
                 response = new ParameterDecodeResponse().getResponseMessage(parser);
             } else if (uri.startsWith("/logs")) {
                 response = new AuthenticationResponse().getResponseMessage(parser);

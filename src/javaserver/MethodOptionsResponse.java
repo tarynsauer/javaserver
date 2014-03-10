@@ -6,14 +6,10 @@ import java.io.IOException;
  * Created by Taryn on 3/6/14.
  */
 public class MethodOptionsResponse extends AbstractResponse {
-    @Override
-    String getBody(String condition) {
-        return "<h1>" + condition + "</h1>";
-    }
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getResponseHeaderAllows() + getContentTypeInfo("text/html") + getBody("These are your options:");
+        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getResponseHeaderAllows() + getContentTypeInfo("text/html") + "<h1>These are your options</h1>";
         return response.getBytes();
     }
 

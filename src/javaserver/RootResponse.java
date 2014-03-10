@@ -15,11 +15,6 @@ public class RootResponse extends AbstractResponse {
         return response.getBytes();
     }
 
-    @Override
-    public String getBody(String condition) {
-        return null;
-    }
-
     public String getFile(RequestParser parser) throws IOException {
         String bodyBegin = "<title>Taryn's Website</title>\n" + "</head>\n" + "<body>\n";
         String bodyEnd = "</body>\n" + "</html>";
@@ -33,8 +28,6 @@ public class RootResponse extends AbstractResponse {
             return bodyBegin + getFileContents(directoryPath + "file1") + bodyEnd;
         } else if (uri.equals("/file2")) {
             return bodyBegin + getFileContents(directoryPath + "file2") + bodyEnd;
-//        } else if (uri.equals("/partial_content.txt")) {
-//            return bodyBegin + getFileContents(directoryPath + "partial_content.txt") + bodyEnd;
         } else if (uri.equals("/text-file.txt")) {
             return bodyBegin + getFileContents(directoryPath + "text-file.txt") + bodyEnd;
         } else {

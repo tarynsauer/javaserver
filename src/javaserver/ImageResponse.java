@@ -39,11 +39,6 @@ public class ImageResponse extends AbstractResponse {
         }
     }
 
-    @Override
-    String getBody(String condition) {
-        return null;
-    }
-
     private byte[] getImage(String fileName) throws IOException {
         File filePath = new File("/Users/Taryn/8thLight/cob_spec/public" + fileName);
         byte[] fileData = new byte[(int)filePath.length()];

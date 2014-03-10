@@ -9,7 +9,8 @@ public class PartialResponse extends RootResponse {
     private String directoryPath = "/Users/Taryn/8thLight/cob_spec/public";
 
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getPartialContent() + getContentTypeInfo("text/html") + getPartialResponse(parser);
+        System.out.println(parser.getRequest());
+        String response = getStatusLine("206 Partial Response") + getDateInfo() + getServerInfo() + getPartialContent(parser) + getContentTypeInfo("text/html") + getPartialResponse(parser);
         return response.getBytes();
     }
 
@@ -20,7 +21,8 @@ public class PartialResponse extends RootResponse {
         return bodyBegin + getFileContents(directoryPath + uri) + bodyEnd;
     }
 
-    private String getPartialContent() {
-        return "Range: bytes=0-999\r\n" ;// + "Content-Length: 1000\r\n" + "Content-Range: bytes 0-999/3980\r\n";
+    private String getPartialContent(RequestParser parser) {
+        return "Content-Range: bytes 0-4/*\r\nContent-Length: 4\r\n";
+//        return "Content-Range: bytes " + parser.getRange() + "/*\r\n";
     }
 }

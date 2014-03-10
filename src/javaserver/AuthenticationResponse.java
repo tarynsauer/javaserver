@@ -8,22 +8,18 @@ import java.io.IOException;
 public class AuthenticationResponse extends AbstractResponse {
 
     @Override
-    String getBody(String condition) {
-        return condition;
-    }
-
-    @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
         String authentication = parser.getAuthentication();
         if ((valid(authentication))) {
-            String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody("" +
+            String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") +
                     "<h1>Logs</h1>" +
                     "<p>GET /log HTTP/1.1</p>" +
                     "<p>PUT /these HTTP/1.1</p>" +
-                    "<p>HEAD /requests HTTP/1.1</p>");
+                    "<p>HEAD /requests HTTP/1.1</p>";
             return response.getBytes();
         } else {
-            String response = getStatusLine("401 Unauthorized") + getDateInfo()  + getAuthenticateHeader() + getServerInfo() + getContentTypeInfo("text/html") + getBody("<h1>Authentication required</h1>");
+            String response = getStatusLine("401 Unauthorized") + getDateInfo()  + getAuthenticateHeader() +
+                    getServerInfo() + getContentTypeInfo("text/html") + "<h1>Authentication required</h1>";
             return response.getBytes();
         }
     }

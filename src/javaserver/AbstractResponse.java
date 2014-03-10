@@ -6,7 +6,6 @@ import java.io.IOException;
  * Created by Taryn on 3/4/14.
  */
 public abstract class AbstractResponse {
-    abstract String getBody(String condition);
     abstract byte[] getResponseMessage(RequestParser parser) throws IOException;
 
     public static String getStatusLine(String status) {

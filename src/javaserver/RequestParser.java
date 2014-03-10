@@ -41,13 +41,14 @@ public class RequestParser {
     }
 
     protected String getRequestURI() throws IOException {
-        Pattern pattern = Pattern.compile(" (/.*?) ");
+        Pattern pattern = Pattern.compile(" (/.*?)[&? ]");
         Matcher matcher = pattern.matcher(request);
         if (matcher.find()) {
             return matcher.group(1);
         } else {
             return "/";
-        }    }
+        }
+    }
 
     public String getAuthentication() {
         Pattern pattern = Pattern.compile("Authorization: Basic (.*?)==");
@@ -79,5 +80,15 @@ public class RequestParser {
             allParameters.put(keyValPair[0], keyValPair[1]);
         }
         return allParameters;
+    }
+
+    public String getRange() {
+        Pattern pattern = Pattern.compile("Range: bytes=(.*?)[A-Z \\$]");
+        Matcher matcher = pattern.matcher(request);
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return "/";
+        }
     }
 }

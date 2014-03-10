@@ -9,10 +9,6 @@ import java.util.regex.Pattern;
  * Created by Taryn on 3/8/14.
  */
 public class ParameterDecodeResponse extends AbstractResponse {
-    @Override
-    String getBody(String condition) {
-        return null;
-    }
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {

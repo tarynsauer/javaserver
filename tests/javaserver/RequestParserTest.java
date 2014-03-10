@@ -20,7 +20,7 @@ public class RequestParserTest {
 
     @Before
     public void setUp() throws Exception {
-       str = "GET /logs?first_name=John&last_name=Doe&action=Submit HTTP/1.1Host: localhost:5000Connection: Authorization: Basic 1234==";
+       str = "GET /logs?first_name=John&last_name=Doe&action=Submit HTTP/1.1Host: localhost:5000Connection: Authorization: Basic 1234==Range: bytes=0-4Compile";
        byte[] data = str.getBytes();
        InputStream input = new ByteArrayInputStream(data);
        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
@@ -54,5 +54,10 @@ public class RequestParserTest {
     @Test
     public void testGetRequestURIReturnsString() throws Exception {
         assertEquals("/logs", requestParser.getRequestURI());
+    }
+
+    @Test
+    public void testGetRangeReturnsString() throws Exception {
+        assertEquals("0-4", requestParser.getRange());
     }
 }

@@ -10,7 +10,6 @@ public class NotFoundResponse extends AbstractResponse {
         return response.getBytes();
     }
 
-    @Override
     public String getBody(String condition) {
         String bodyBegin = "<title>Taryn's Website</title>\n" + "</head>\n" + "<body>\n";
         String bodyMiddle = "<h1>" + condition + "</h1>";
