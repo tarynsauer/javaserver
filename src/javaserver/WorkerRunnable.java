@@ -22,7 +22,7 @@ public class WorkerRunnable implements Runnable {
             byte[] response = getResponse();
             provideResponseForClient(response);
         } catch (IOException e) {
-            System.out.println("Request could not be processed.");
+            System.out.println("Request could not be processed");
             e.printStackTrace();
         }
     }

@@ -1,10 +1,11 @@
 package javaserver;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javaserver.HTTPStatusConstants.OK;
 /**
  * Created by Taryn on 3/8/14.
  */
@@ -12,8 +13,13 @@ public class ParameterDecodeResponse extends AbstractResponse {
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getQueries(parser.getRequest());
+        String response = getStatusLine(OK) + getDateInfo() + getServerInfo() +
+                getContentTypeInfo("text/html") + getBody(parser.getRequest());
         return response.getBytes();
+    }
+
+    public String getBody(String url) throws UnsupportedEncodingException {
+        return bodyBegin() + getQueries(url) + bodyEnd();
     }
 
     private String getQueries(String url) throws UnsupportedEncodingException {

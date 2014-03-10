@@ -2,23 +2,22 @@ package javaserver;
 
 import java.io.IOException;
 
+import static javaserver.HTTPStatusConstants.PARTIAL_RESPONSE;
+import static javaserver.JavaserverConstants.DIRECTORY_PATH;
 /**
  * Created by Taryn on 3/7/14.
  */
 public class PartialResponse extends RootResponse {
-    private String directoryPath = "/Users/Taryn/8thLight/cob_spec/public";
 
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
-        System.out.println(parser.getRequest());
-        String response = getStatusLine("206 Partial Response") + getDateInfo() + getServerInfo() + getPartialContent(parser) + getContentTypeInfo("text/html") + getPartialResponse(parser);
+        String response = getStatusLine(PARTIAL_RESPONSE) + getDateInfo() + getServerInfo() +
+                getPartialContent(parser) + getContentTypeInfo("text/html") + getPartialResponse(parser);
         return response.getBytes();
     }
 
     public String getPartialResponse(RequestParser parser) throws IOException {
-        String bodyBegin = "<title>Taryn's Website</title>\n" + "</head>\n" + "<body>\n";
-        String bodyEnd = "</body>\n" + "</html>";
-        String uri = parser.getRequestURI();
-        return bodyBegin + getFileContents(directoryPath + uri) + bodyEnd;
+        String uri = parser.getRequestedFileName();
+        return bodyBegin() + getFileContents(DIRECTORY_PATH + uri) + bodyEnd();
     }
 
     private String getPartialContent(RequestParser parser) {

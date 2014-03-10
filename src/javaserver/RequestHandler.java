@@ -23,8 +23,6 @@ public class RequestHandler {
 
             if (uri.equals("/")) {
                 response = new RootResponse().getResponseMessage(parser);
-            } else if (uri.equals("/foobar")) {
-                response = new NotFoundResponse().getResponseMessage(parser);
             } else if (uri.equals("/file1")) {
                 if (!(method.equals("GET"))) {
                     response = new MethodNotAllowedResponse().getResponseMessage(parser);
@@ -33,11 +31,7 @@ public class RequestHandler {
                 }
             } else if (uri.equals("/file2")) {
                 response = new RootResponse().getResponseMessage(parser);
-            } else if (uri.equals("/image.gif")) {
-                response = new ImageResponse().getResponseMessage(parser);
-            } else if (uri.equals("/image.jpeg")) {
-                response = new ImageResponse().getResponseMessage(parser);
-            } else if (uri.equals("/image.png")) {
+            } else if (uri.startsWith("/image")) {
                 response = new ImageResponse().getResponseMessage(parser);
             } else if (uri.equals("/partial_content.txt")) {
                 response = new PartialResponse().getResponseMessage(parser);
@@ -47,33 +41,20 @@ public class RequestHandler {
                 } else {
                     response = new RootResponse().getResponseMessage(parser);
                 }
-            } else if ((uri.equals("/form"))) {
+            } else if ((uri.startsWith("/form"))) {
                 response = formResponse.getResponseMessage(parser);
             } else if (uri.startsWith("/parameters")) {
                 response = new ParameterDecodeResponse().getResponseMessage(parser);
             } else if (uri.startsWith("/logs")) {
                 response = new AuthenticationResponse().getResponseMessage(parser);
-            } else if (uri.startsWith("/method_options")) {
+            } else if (uri.equals("/method_options")) {
                 response = new MethodOptionsResponse().getResponseMessage(parser);
-            } else if (uri.startsWith("/redirect")) {
+            } else if (uri.equals("/redirect")) {
                 response = new RedirectResponse().getResponseMessage(parser);
             } else {
-                response = new RootResponse().getResponseMessage(parser);
+                response = new NotFoundResponse().getResponseMessage(parser);
             }
         return response;
-        }
-
-    public String getStatusLine(String status) {
-        return "HTTP/1.1 " + status +  "\r\n";
-    }
-
-    public String getDateInfo() {
-        java.util.Date date= new java.util.Date();
-        return"Date: " + date.toString() + "\r\n";
-    }
-
-    public String getServerInfo() {
-        return "Server: Taryn's Java Server\r\n";
     }
 
 }

@@ -3,6 +3,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import static javaserver.JavaserverConstants.DIRECTORY_PATH;
+import static javaserver.HTTPStatusConstants.OK;
 /**
  * Created by Taryn on 3/6/14.
  */
@@ -10,15 +12,16 @@ public class ImageResponse extends AbstractResponse {
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String fileName = parser.getRequestURI();
+        String fileName = parser.getRequestedFileName();
         String contentType = getContentTypeString(fileName);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getStatusLine("200 OK"));
+        stringBuilder.append(getStatusLine(OK));
         stringBuilder.append(getDateInfo());
         stringBuilder.append(getServerInfo());
         stringBuilder.append(getContentTypeInfo(contentType));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
         try {
             outputStream.write(stringBuilder.toString().getBytes());
             outputStream.write(getImage(fileName));
@@ -29,10 +32,10 @@ public class ImageResponse extends AbstractResponse {
         return outputStream.toByteArray();
     }
 
-    String getContentTypeString(String fileName) {
-        if (fileName.equals("/image.gif")) {
+    private String getContentTypeString(String fileName) {
+        if (fileName.endsWith(".gif")) {
             return "image/gif";
-        } else if (fileName.equals("/image.jpeg")) {
+        } else if ((fileName.endsWith(".jpeg") || (fileName.endsWith(".jpg")))) {
             return "image/jpeg";
         } else {
             return "image/png";
@@ -40,7 +43,7 @@ public class ImageResponse extends AbstractResponse {
     }
 
     private byte[] getImage(String fileName) throws IOException {
-        File filePath = new File("/Users/Taryn/8thLight/cob_spec/public" + fileName);
+        File filePath = new File(DIRECTORY_PATH + fileName);
         byte[] fileData = new byte[(int)filePath.length()];
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath);

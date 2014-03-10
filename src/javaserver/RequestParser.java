@@ -50,6 +50,16 @@ public class RequestParser {
         }
     }
 
+    protected String getRequestedFileName() throws IOException {
+        Pattern pattern = Pattern.compile(" /(.*?)[&? ]");
+        Matcher matcher = pattern.matcher(request);
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return "/";
+        }
+    }
+
     public String getAuthentication() {
         Pattern pattern = Pattern.compile("Authorization: Basic (.*?)==");
         Matcher matcher = pattern.matcher(request);

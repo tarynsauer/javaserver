@@ -20,7 +20,6 @@ public class Server {
     }
 
     public void start() {
-
         openServerSocket();
 
         while(true) {

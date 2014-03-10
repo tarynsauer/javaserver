@@ -57,6 +57,16 @@ public class RequestParserTest {
     }
 
     @Test
+    public void testGetRequestedFileName() throws Exception {
+        String test = "GET /filename.txt?first_name=John&last_name=Doe&action=Submit HTTP/1.1Host: localhost:5000Connection: Authorization: Basic 1234==Range: bytes=0-4Compile";
+        byte[] data = test.getBytes();
+        InputStream input = new ByteArrayInputStream(data);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
+        RequestParser parser = new RequestParser(bufferedReader);
+        assertEquals("filename.txt", parser.getRequestedFileName());
+    }
+
+    @Test
     public void testGetRangeReturnsString() throws Exception {
         assertEquals("0-4", requestParser.getRange());
     }

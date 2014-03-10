@@ -1,18 +1,19 @@
 package javaserver;
 
+import java.io.IOException;
+import static javaserver.HTTPStatusConstants.NOT_FOUND;
 /**
  * Created by Taryn on 3/4/14.
  */
 public class NotFoundResponse extends AbstractResponse {
 
-    public byte[] getResponseMessage(RequestParser parser) {
-        String response = getStatusLine("404 Not Found") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody("404 Not Found");
+    public byte[] getResponseMessage(RequestParser parser) throws IOException {
+        String response = getStatusLine(NOT_FOUND) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + pageNotFoundMessage(parser.getRequestURI());
         return response.getBytes();
     }
 
-    public String getBody(String condition) {
-        String bodyBegin = "<title>Taryn's Website</title>\n" + "</head>\n" + "<body>\n";
-        String bodyMiddle = "<h1>" + condition + "</h1>";
-        return bodyBegin + bodyMiddle + "</body>\n" + "</html>";
+    public String pageNotFoundMessage(String uri) {
+        return bodyBegin() + "<h1>Hmm...you're looking for " + uri + ".</h1><p>No dice.</p>" + bodyEnd();
     }
+
 }

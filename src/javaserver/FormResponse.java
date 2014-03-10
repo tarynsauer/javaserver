@@ -18,11 +18,12 @@ public class FormResponse extends AbstractResponse {
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getAttribute(parser);
+        getAttribute(parser);
+        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody();
         return response.getBytes();
     }
 
-    private String getAttribute(RequestParser parser) throws IOException {
+    private void getAttribute(RequestParser parser) throws IOException {
         String method = parser.getMethod();
 
         if (method.equals("POST")) {
@@ -32,7 +33,11 @@ public class FormResponse extends AbstractResponse {
         } else if (method.equals("DELETE")) {
             setDataValue("");
         }
-        return "<p data = " + getDataValue() + ">There may be a hidden name value here.</p>";
+    }
+
+    private String getBody() {
+        return bodyBegin() + "<p data = " + getDataValue() +
+                ">There may be a hidden name value here.</p>" + bodyEnd();
     }
 
 }
