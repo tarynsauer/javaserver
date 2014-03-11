@@ -11,19 +11,19 @@ import java.util.regex.Pattern;
 public class RequestParser {
     private BufferedReader clientRequest;
     private String request;
-    private HashMap<String, String> headers;
 
     public RequestParser(BufferedReader clientRequest) throws IOException {
         this.clientRequest = clientRequest;
         this.request = parseRequest();
-        this.headers = getHeaders();
-        System.out.println(getHeaders());
     }
 
     public String getRequest() {
         return this.request;
     }
 
+    public void setRequest(String request) {
+        this.request = request;
+    }
     public HashMap<String, String> getHeaders() throws IOException {
         String[] splitRequest = getRequest().split("--break--");
         HashMap <String, String> map = new HashMap<String, String>();
@@ -31,11 +31,37 @@ public class RequestParser {
             String[] mapPair = line.split(": ");
             if (mapPair.length > 1) {
                 map.put(mapPair[0], mapPair[1]);
-            } else {
-                map.put(mapPair[0], "");
             }
         }
         return map;
+    }
+
+    public HashMap<String, String> getVariables() throws IOException {
+        String[] splitRequest = getRequest().split("--break----break----break--");
+        if (splitRequest.length > 1) {
+            splitRequest[0] = null;
+        } else {
+            return null;
+        }
+        HashMap <String, String> map = new HashMap<String, String>();
+        for (String item : splitRequest) {
+            if (item != null) {
+                String[] mapPair = item.split("=");
+                if (mapPair.length > 1) {
+                    map.put(mapPair[0], mapPair[1]);
+                }
+            }
+
+        }
+        return map;
+    }
+
+    public String getHeaderValue(String headerName) throws IOException {
+      return getHeaders().get(headerName);
+    }
+
+    public String getVariableValue(String variableName) throws IOException {
+        return getVariables().get(variableName);
     }
 
     public String parseRequest() throws IOException {
@@ -129,4 +155,5 @@ public class RequestParser {
             return "/";
         }
     }
+
 }

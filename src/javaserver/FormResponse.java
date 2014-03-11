@@ -18,6 +18,8 @@ public class FormResponse extends AbstractResponse {
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
+        System.out.println(parser.getRequest());
+        System.out.println(parser.getVariables());
         getAttribute(parser);
         String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody();
         return response.getBytes();
@@ -26,10 +28,9 @@ public class FormResponse extends AbstractResponse {
     private void getAttribute(RequestParser parser) throws IOException {
         String method = parser.getMethod();
 
-        if (method.equals("POST")) {
-            setDataValue("cosby");
-        } else if (method.equals("PUT")) {
-            setDataValue("heathcliff");
+        if ((method.equals("POST") || (method.equals("PUT")))) {
+            System.out.println(parser.getVariableValue("data"));
+            setDataValue(parser.getVariableValue("data"));
         } else if (method.equals("DELETE")) {
             setDataValue("");
         }
