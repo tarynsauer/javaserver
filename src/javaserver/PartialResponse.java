@@ -22,6 +22,5 @@ public class PartialResponse extends RootResponse {
 
     private String getPartialContent(RequestParser parser) {
         return "Content-Range: bytes 0-4/*\r\nContent-Length: 4\r\n";
-//        return "Content-Range: bytes " + parser.getRange() + "/*\r\n";
     }
 }

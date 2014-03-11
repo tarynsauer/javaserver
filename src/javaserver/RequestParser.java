@@ -1,39 +1,67 @@
 package javaserver;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Map;
-import java.util.HashMap;
 /**
  * Created by Taryn on 3/4/14.
  */
 public class RequestParser {
     private BufferedReader clientRequest;
     private String request;
+    private HashMap<String, String> headers;
 
     public RequestParser(BufferedReader clientRequest) throws IOException {
         this.clientRequest = clientRequest;
         this.request = parseRequest();
+        this.headers = getHeaders();
+        System.out.println(getHeaders());
     }
 
     public String getRequest() {
         return this.request;
     }
 
+    public HashMap<String, String> getHeaders() throws IOException {
+        String[] splitRequest = getRequest().split("--break--");
+        HashMap <String, String> map = new HashMap<String, String>();
+        for (String line : splitRequest) {
+            String[] mapPair = line.split(": ");
+            if (mapPair.length > 1) {
+                map.put(mapPair[0], mapPair[1]);
+            } else {
+                map.put(mapPair[0], "");
+            }
+        }
+        return map;
+    }
+
     public String parseRequest() throws IOException {
-        String line;
+        String line = "";
         StringBuilder stringBuilder = new StringBuilder();
 
         while((line = clientRequest.readLine()) != null){
-
-            stringBuilder.append(line);
+            stringBuilder.append(line + "--break--");
             if (line.equals("")) {
-                return stringBuilder.toString();
+                return stringBuilder.toString() + "--break--" + getRequestBody();
             }
+        }
+        return stringBuilder.toString() + "--break--" + getRequestBody();
+    }
 
+    private String getRequestBody() throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while (clientRequest.ready()) {
+            stringBuilder.append((char) clientRequest.read());
         }
         return stringBuilder.toString();
+    }
+
+    public boolean includesHeader(String headerName) {
+        return request.contains(headerName);
     }
 
     protected String getMethod() throws IOException {
