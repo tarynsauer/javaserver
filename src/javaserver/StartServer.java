@@ -12,6 +12,6 @@ public class StartServer {
         String directory = options.parseDirectory();
 
         Server server = new Server(port, directory);
-        server.start();
+        new Thread(server).start();
     }
 }

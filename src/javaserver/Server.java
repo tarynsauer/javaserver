@@ -1,37 +1,56 @@
 package javaserver;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
  * Created by Taryn on 3/3/14.
  */
-public class Server {
+public class Server implements Runnable {
     private int port;
     private String directory;
     private ServerSocket serverSocket = null;
+    protected Thread runningThread = null;
+    protected boolean isStopped = false;
 
     public Server(int port, String directory) {
         this.port = port;
         this.directory = directory;
     }
 
-    public void start() {
+    @Override
+    public void run() {
+        synchronized(this){
+            this.runningThread = Thread.currentThread();
+        }
         openServerSocket();
-        int numConnections = 0;
+        while(! isStopped()) {
+            Socket clientSocket = null;
+            try {
+                clientSocket = serverSocket.accept();
+            } catch (IOException e) {
+                if (isStopped()) {
+                    System.out.println("Server stopped.");
+                    return;
+                }
+                throw new RuntimeException("Error accepting client connection", e);
+            }
+            new Thread(new WorkerRunnable(clientSocket)).start();
+        }
+        System.out.println("Server Stopped.");
+    }
 
-        while(true) {
-            Socket clientSocket = acceptClientConnection();
-            BufferedReader input = getClientRequest(clientSocket);
+    private synchronized boolean isStopped() {
+        return this.isStopped;
+    }
 
-            System.out.println("Connection " + numConnections++ + " on port " + this.port);
-
-            WorkerRunnable workerRunnable = new WorkerRunnable(clientSocket, directory, input);
-            Thread thread = new Thread(workerRunnable);
-            thread.start();
+    public synchronized void stop(){
+        this.isStopped = true;
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error closing server", e);
         }
     }
 
@@ -42,28 +61,5 @@ public class Server {
             throw new RuntimeException("Can't open port " + this.port, e);
         }
     }
-
-    private Socket acceptClientConnection() {
-        Socket clientSocket = null;
-        try {
-            clientSocket = serverSocket.accept();
-        } catch (IOException e) {
-            System.out.println("Can't accept client connection");
-            e.printStackTrace();
-        }
-        return clientSocket;
-    }
-
-    private BufferedReader getClientRequest(Socket clientSocket) {
-        BufferedReader input = null;
-        try {
-            input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (IOException e) {
-            System.out.println("Can't get client request");
-            e.printStackTrace();
-        }
-        return input;
-    }
-
 
 }
