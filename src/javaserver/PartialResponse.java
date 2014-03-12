@@ -1,7 +1,9 @@
 package javaserver;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static java.util.Arrays.copyOfRange;
 import static javaserver.HTTPStatusConstants.PARTIAL_RESPONSE;
 import static javaserver.JavaserverConstants.DIRECTORY_PATH;
 /**
@@ -9,18 +11,57 @@ import static javaserver.JavaserverConstants.DIRECTORY_PATH;
  */
 public class PartialResponse extends RootResponse {
 
+    @Override
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine(PARTIAL_RESPONSE) + getDateInfo() + getServerInfo() +
-                getPartialContent(parser) + getContentTypeInfo("text/html") + getPartialResponse(parser);
-        return response.getBytes();
+        System.out.println(parser.getRequest());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getStatusLine(PARTIAL_RESPONSE));
+        stringBuilder.append(getDateInfo());
+        stringBuilder.append(getServerInfo());
+        stringBuilder.append(getContentTypeInfo("text/html"));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try {
+            outputStream.write(stringBuilder.toString().getBytes());
+            outputStream.write(bodyBegin().getBytes());
+            outputStream.write(getPartialResponse(parser));
+            outputStream.write(bodyEnd().getBytes());
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return outputStream.toByteArray();
     }
 
-    public String getPartialResponse(RequestParser parser) throws IOException {
+    public byte[] getPartialResponse(RequestParser parser) throws IOException {
         String uri = parser.getRequestedFileName();
-        return bodyBegin() + getFileContents(DIRECTORY_PATH + uri) + bodyEnd();
+        byte[] contents = getFileContents(DIRECTORY_PATH + uri).getBytes();
+        if (getRange(parser) == null) {
+            return contents;
+        } else {
+            return copyOfRange(contents, getBeginRange(parser), getEndRange(parser) + 1);
+        }
     }
 
-    private String getPartialContent(RequestParser parser) {
-        return "Content-Range: bytes 0-4/*\r\nContent-Length: 4\r\n";
+    public static int getBeginRange(RequestParser parser) throws IOException {
+        return Integer.parseInt(getRange(parser)[0]);
+    }
+
+    public static int getEndRange(RequestParser parser) throws IOException {
+        return (Integer.parseInt(getRange(parser)[1]));
+    }
+
+    private static String[] getRange(RequestParser parser) throws IOException {
+        String rangeParts = parser.getHeaderValue("Range");
+        if (rangeParts == null) {
+            return null;
+        }
+
+        String[] rangeList = rangeParts.split("=");
+        if (rangeList.length > 1) {
+            return rangeList[1].split("-");
+        } else {
+            return null;
+        }
     }
 }

@@ -27,10 +27,10 @@ public class RequestParserTest {
        requestParser = new RequestParser(bufferedReader);
     }
 
-//    @Test
-//    public void testParseRequestReturnsParsedString() throws Exception {
-//        assertEquals(str + "\r\n", requestParser.getRequest());
-//    }
+    @Test
+    public void testParseRequestReturnsParsedString() throws Exception {
+        assertEquals("GET /logs?first_name=John&last_name=Doe&action=Submit HTTP/1.1--break--Host: localhost:5000--break--Connection: true--break--Authorization: Basic 1234==--break--Range: bytes=0-4Compile--break----break--", requestParser.getRequest());
+    }
 
     @Test
     public void testGetMethodReturnsMethodString() throws Exception {
@@ -64,11 +64,6 @@ public class RequestParserTest {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
         RequestParser parser = new RequestParser(bufferedReader);
         assertEquals("filename.txt", parser.getRequestedFileName());
-    }
-
-    @Test
-    public void testGetRangeReturnsString() throws Exception {
-        assertEquals("0-4", requestParser.getRange());
     }
 
     @Test

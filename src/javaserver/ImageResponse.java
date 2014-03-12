@@ -11,7 +11,7 @@ import static javaserver.HTTPStatusConstants.OK;
 public class ImageResponse extends AbstractResponse {
 
     @Override
-    byte[] getResponseMessage(RequestParser parser) throws IOException {
+    public byte[] getResponseMessage(RequestParser parser) throws IOException {
         String fileName = parser.getRequestedFileName();
         String contentType = getContentTypeString(fileName);
 

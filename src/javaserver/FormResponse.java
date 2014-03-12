@@ -1,7 +1,7 @@
 package javaserver;
 
 import java.io.IOException;
-
+import static javaserver.HTTPStatusConstants.OK;
 /**
  * Created by Taryn on 3/7/14.
  */
@@ -17,11 +17,9 @@ public class FormResponse extends AbstractResponse {
     }
 
     @Override
-    byte[] getResponseMessage(RequestParser parser) throws IOException {
-        System.out.println(parser.getRequest());
-        System.out.println(parser.getVariables());
+    public byte[] getResponseMessage(RequestParser parser) throws IOException {
         getAttribute(parser);
-        String response = getStatusLine("200 OK") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody();
+        String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody();
         return response.getBytes();
     }
 
@@ -29,7 +27,6 @@ public class FormResponse extends AbstractResponse {
         String method = parser.getMethod();
 
         if ((method.equals("POST") || (method.equals("PUT")))) {
-            System.out.println(parser.getVariableValue("data"));
             setDataValue(parser.getVariableValue("data"));
         } else if (method.equals("DELETE")) {
             setDataValue("");
@@ -38,7 +35,7 @@ public class FormResponse extends AbstractResponse {
 
     private String getBody() {
         return bodyBegin() + "<p data = " + getDataValue() +
-                ">There may be a hidden name value here.</p>" + bodyEnd();
+        ">There may be a hidden name value here.</p>" + bodyEnd();
     }
 
 }

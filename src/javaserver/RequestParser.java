@@ -146,14 +146,4 @@ public class RequestParser {
         return allParameters;
     }
 
-    public String getRange() {
-        Pattern pattern = Pattern.compile("Range: bytes=(.*?)[A-Z \\$]");
-        Matcher matcher = pattern.matcher(request);
-        if (matcher.find()) {
-            return matcher.group(1);
-        } else {
-            return "/";
-        }
-    }
-
 }

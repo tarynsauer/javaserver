@@ -18,7 +18,7 @@ public class ParameterDecodeResponse extends AbstractResponse {
         return response.getBytes();
     }
 
-    public String getBody(String url) throws UnsupportedEncodingException {
+    private String getBody(String url) throws UnsupportedEncodingException {
         return bodyBegin() + getQueries(url) + bodyEnd();
     }
 
@@ -49,6 +49,8 @@ public class ParameterDecodeResponse extends AbstractResponse {
             queryParts += s;
             queryParts += " = ";
         }
-        return queryParts.split("&");
+        String[] variables = queryParts.split("&");
+        variables[variables.length - 1] = variables[variables.length - 1].split(" HTTP/1.1")[0];
+        return variables;
     }
 }
