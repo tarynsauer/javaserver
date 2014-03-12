@@ -1,4 +1,4 @@
-package javaserver.mocks;
+package javaserver;
 
 import javaserver.ImageResponse;
 import javaserver.RequestParser;

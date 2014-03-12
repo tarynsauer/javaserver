@@ -1,6 +1,4 @@
 package javaserver;
-import javaserver.mocks.MockImageResponse;
-import javaserver.mocks.MockRootResponse;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,4 +54,54 @@ public class RequestHandlerTest extends TestHelpers {
         }
     }
 
+    @Test
+    public void testGetResponseForPartialResponse() throws Exception {
+        requestHandler.setPartialResponse(new MockPartialResponse());
+        setMockRequest("GET /partial_content.txt HTTP/1.1--break--Connection: close--break--Host: localhost:5000--break----break----break--");
+        String actualOutput = responseToString(requestHandler.getResponse());
+        assertEquals(actualOutput, "PartialResponse getResponse() called");
+    }
+
+    @Test
+    public void testGetResponseForParameterDecodeResponse() throws Exception {
+        requestHandler.setParameterDecodeResponse(new MockParameterDecodeResponse());
+        setMockRequest("GET /parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff HTTP/1.1--break--Connection: close--break--Host: localhost:5000--break----break----break--");
+        String actualOutput = responseToString(requestHandler.getResponse());
+        assertEquals(actualOutput, "ParameterDecodeResponse getResponse() called");
+    }
+
+    @Test
+    public void testGetResponseForAuthenticationResponse() throws Exception {
+        requestHandler.setAuthenticationResponse(new MockAuthenticationResponse());
+        setMockRequest("GET /logs HTTP/1.1--break--Authorization: Basic YWRtaW46aHVudGVyMg==--break--Connection: close--break--Host: localhost:5000--break----break----break--");
+        String actualOutput = responseToString(requestHandler.getResponse());
+        assertEquals(actualOutput, "AuthenticationResponse getResponse() called");
+    }
+
+    @Test
+    public void testGetResponseForMethodOptionsResponse() throws Exception {
+        String[] methods = {"OPTIONS", "GET", "PUT", "POST", "HEAD"};
+        for (String method: methods) {
+            requestHandler.setMethodOptionsResponse(new MockMethodOptionsResponse());
+            setMockRequest(method + " /method_options HTTP/1.1--break--Connection: close--break--Host: localhost:5000--break----break----break--");
+            String actualOutput = responseToString(requestHandler.getResponse());
+            assertEquals(actualOutput, "MethodOptionsResponse getResponse() called");
+        }
+    }
+
+    @Test
+    public void testGetResponseForRedirectResponse() throws Exception {
+        requestHandler.setRedirectResponse(new MockRedirectResponse());
+        setMockRequest("GET /redirect HTTP/1.1--break--Connection: close--break--Host: localhost:5000--break----break----break--");
+        String actualOutput = responseToString(requestHandler.getResponse());
+        assertEquals(actualOutput, "RedirectResponse getResponse() called");
+    }
+
+    @Test
+    public void testGetResponseForNotFoundResponse() throws Exception {
+        requestHandler.setNotFoundResponse(new MockNotFoundResponse());
+        setMockRequest("GET /foobar HTTP/1.1--break--Connection: close--break--Host: localhost:5000--break----break----break--");
+        String actualOutput = responseToString(requestHandler.getResponse());
+        assertEquals(actualOutput, "NotFoundResponse getResponse() called");
+    }
 }

@@ -12,9 +12,6 @@ public class ImageResponse extends AbstractResponse {
 
     @Override
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String fileName = parser.getRequestedFileName();
-        String contentType = getContentTypeString(fileName);
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getStatusLine(OK));
         stringBuilder.append(getDateInfo());
@@ -24,22 +21,12 @@ public class ImageResponse extends AbstractResponse {
 
         try {
             outputStream.write(stringBuilder.toString().getBytes());
-            outputStream.write(getImage(fileName));
+            outputStream.write(getImage(parser.getRequestedFileName()));
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return outputStream.toByteArray();
-    }
-
-    private String getContentTypeString(String fileName) {
-        if (fileName.endsWith(".gif")) {
-            return "image/gif";
-        } else if ((fileName.endsWith(".jpeg") || (fileName.endsWith(".jpg")))) {
-            return "image/jpeg";
-        } else {
-            return "image/png";
-        }
     }
 
     private byte[] getImage(String fileName) throws IOException {
@@ -53,7 +40,6 @@ public class ImageResponse extends AbstractResponse {
             e.printStackTrace();
         }
         return fileData;
-
     }
 
 }

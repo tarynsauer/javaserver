@@ -1,7 +1,4 @@
-package javaserver.mocks;
-
-import javaserver.RequestParser;
-import javaserver.RootResponse;
+package javaserver;
 
 public class MockRootResponse extends RootResponse {
 
