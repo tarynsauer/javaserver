@@ -26,11 +26,11 @@ public abstract class AbstractResponse {
     }
 
     public String bodyBegin() {
-        return "<title>Taryn's Website</title><html><body>\n";
+        return "<html><title>Taryn's Website</title><body>";
     }
 
     public String bodyEnd() {
-        return "</body>\n" + "</html>";
+        return "</body></html>";
     }
 
 }

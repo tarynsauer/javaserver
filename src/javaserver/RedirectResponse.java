@@ -10,7 +10,7 @@ public class RedirectResponse extends AbstractResponse {
 
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine(MOVED_PERMANENTLY) + getLocation("/") + getServerInfo() + getContentTypeInfo("text/html");
+        String response = getStatusLine(MOVED_PERMANENTLY) + getLocation("/") + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html");
         return response.getBytes();
     }
 

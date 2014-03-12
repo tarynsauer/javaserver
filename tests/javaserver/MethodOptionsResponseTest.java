@@ -28,7 +28,7 @@ public class MethodOptionsResponseTest extends TestHelpers {
                 "Server: Taryn's Java Server" +
                 "Allow: GET,HEAD,POST,OPTIONS,PUT" +
                 "Content-Type: text/html" +
-                "<title>Taryn's Website</title><html><body>" +
+                "<html><title>Taryn's Website</title><body>" +
                 "<h1>These are your options</h1></body></html>";
         return response.getBytes();
     }

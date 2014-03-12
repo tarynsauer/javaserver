@@ -28,7 +28,7 @@ public class WorkerRunnable implements Runnable {
     }
 
     private byte[] getResponse() throws IOException {
-        RequestHandler requestHandler = new RequestHandler(new RequestParser(input), directory);
+        RequestHandler requestHandler = new RequestHandler(new RequestParser(input));
         return requestHandler.getResponse();
     }
 

@@ -30,7 +30,7 @@ public class ParameterDecodeResponseTest extends TestHelpers {
                 "Date: " + date +
                 "Server: Taryn's Java Server" +
                 "Content-Type: text/html" +
-                "<title>Taryn's Website</title><html><body>" +
+                "<html><title>Taryn's Website</title><body>" +
                 "<h1>Decoded parameters:</h1>" +
                 "<p>variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?</p>" +
                 "<p>variable_2 = stuff</p></body>" +

@@ -28,7 +28,7 @@ public class AuthenticationResponseTest extends TestHelpers {
         "Date: " + date +
         "Server: Taryn's Java Server" +
         "Content-Type: text/html" +
-         "<title>Taryn's Website</title><html><body>" +
+         "<html><title>Taryn's Website</title><body>" +
          "<h1>Logs</h1><p>GET /log HTTP/1.1</p><p>PUT /these HTTP/1.1</p><p>HEAD /requests HTTP/1.1</p></body>" +
         "</html>";
         return response.getBytes();
@@ -41,7 +41,7 @@ public class AuthenticationResponseTest extends TestHelpers {
                 "WWW-Authenticate: Basic realm=\"Authentication required for Logs\"" +
                 "Server: Taryn's Java Server" +
                 "Content-Type: text/html" +
-                "<title>Taryn's Website</title><html><body>" +
+                "<html><title>Taryn's Website</title><body>" +
                 "<h1>Authentication required</h1></body>" +
                 "</html>";
         return response.getBytes();

@@ -7,13 +7,35 @@ import java.io.IOException;
  */
 public class RequestHandler {
     private RequestParser parser;
-    private String directory;
+    private RootResponse rootResponse;
+    private MethodNotAllowedResponse methodNotAllowedResponse;
     private FormResponse formResponse;
+    private ImageResponse imageResponse;
+    private PartialResponse partialResponse;
 
-    public RequestHandler(RequestParser parser, String directory) throws IOException {
+    public RequestHandler(RequestParser parser) throws IOException {
         this.parser = parser;
-        this.directory = directory;
         this.formResponse = new FormResponse();
+        this.rootResponse = new RootResponse();
+        this.methodNotAllowedResponse = new MethodNotAllowedResponse();
+        this.imageResponse = new ImageResponse();
+        this.partialResponse = new PartialResponse();
+    }
+
+    public void setRootResponse(RootResponse rootResponse) {
+        this.rootResponse = rootResponse;
+    }
+
+    public void setMethodNotAllowedResponse(MethodNotAllowedResponse methodNotAllowedResponse) {
+        this.methodNotAllowedResponse = methodNotAllowedResponse;
+    }
+
+    public void setImageResponse(ImageResponse imageResponse) {
+        this.imageResponse = imageResponse;
+    }
+
+    public void setPartialResponse(PartialResponse partialResponse) {
+        this.partialResponse = partialResponse;
     }
 
     public byte[] getResponse() throws IOException {
@@ -22,24 +44,24 @@ public class RequestHandler {
         String uri = parser.getRequestURI();
 
             if (uri.equals("/")) {
-                response = new RootResponse().getResponseMessage(parser);
+                response = rootResponse.getResponseMessage(parser);
             } else if (uri.equals("/file1")) {
                 if (!(method.equals("GET"))) {
-                    response = new MethodNotAllowedResponse().getResponseMessage(parser);
+                    response = methodNotAllowedResponse.getResponseMessage(parser);
                 } else {
-                    response = new RootResponse().getResponseMessage(parser);
+                    response = rootResponse.getResponseMessage(parser);
                 }
             } else if (uri.equals("/file2")) {
-                response = new RootResponse().getResponseMessage(parser);
+                response = rootResponse.getResponseMessage(parser);
             } else if (uri.startsWith("/image")) {
-                response = new ImageResponse().getResponseMessage(parser);
+                response = imageResponse.getResponseMessage(parser);
             } else if (uri.equals("/partial_content.txt")) {
-                response = new PartialResponse().getResponseMessage(parser);
+                response = partialResponse.getResponseMessage(parser);
             } else if (uri.equals("/text-file.txt")) {
                 if (!(method.equals("GET"))) {
-                    response = new MethodNotAllowedResponse().getResponseMessage(parser);
+                    response = methodNotAllowedResponse.getResponseMessage(parser);
                 } else {
-                    response = new RootResponse().getResponseMessage(parser);
+                    response = rootResponse.getResponseMessage(parser);
                 }
             } else if ((uri.startsWith("/form"))) {
                 response = formResponse.getResponseMessage(parser);

@@ -28,10 +28,7 @@ public class PartialResponseTest extends TestHelpers{
         String response = "HTTP/1.1 " + PARTIAL_RESPONSE +
                 "Date: " + date +
                 "Server: Taryn's Java Server" +
-                "Content-Type: text/html" +
-                "<title>Taryn's Website</title><html><body>" +
-                "This </body>" +
-                "</html>";
+                "Content-Type: text/plainThis";
         return response.getBytes();
     }
 
@@ -46,12 +43,14 @@ public class PartialResponseTest extends TestHelpers{
 
     @Test
     public void testGetBeginRange() throws Exception {
+        setMockPartialResponseRequest();
         int expectedValue = PartialResponse.getBeginRange(requestParser);
         assertEquals(expectedValue, 0);
     }
 
     @Test
     public void testGetEndRange() throws Exception {
+        setMockPartialResponseRequest();
         int expectedValue = PartialResponse.getEndRange(requestParser);
         assertEquals(expectedValue, 4);
     }

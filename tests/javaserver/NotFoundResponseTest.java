@@ -27,7 +27,7 @@ public class NotFoundResponseTest extends TestHelpers {
                 "Date: " + date +
                 "Server: Taryn's Java Server" +
                 "Content-Type: text/html" +
-                "<title>Taryn's Website</title><html><body>" +
+                "<html><title>Taryn's Website</title><body>" +
                 "<h1>Hmm...you're looking for /foobar.</h1><p>No dice.</p></body></html>";
         return response.getBytes();
     }

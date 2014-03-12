@@ -13,19 +13,16 @@ public class PartialResponse extends RootResponse {
 
     @Override
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
-        System.out.println(parser.getRequest());
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getStatusLine(PARTIAL_RESPONSE));
         stringBuilder.append(getDateInfo());
         stringBuilder.append(getServerInfo());
-        stringBuilder.append(getContentTypeInfo("text/html"));
+        stringBuilder.append(getContentTypeInfo("text/plain"));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try {
             outputStream.write(stringBuilder.toString().getBytes());
-            outputStream.write(bodyBegin().getBytes());
             outputStream.write(getPartialResponse(parser));
-            outputStream.write(bodyEnd().getBytes());
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,7 +36,7 @@ public class PartialResponse extends RootResponse {
         if (getRange(parser) == null) {
             return contents;
         } else {
-            return copyOfRange(contents, getBeginRange(parser), getEndRange(parser) + 1);
+            return copyOfRange(contents, getBeginRange(parser), getEndRange(parser));
         }
     }
 
@@ -61,7 +58,7 @@ public class PartialResponse extends RootResponse {
         if (rangeList.length > 1) {
             return rangeList[1].split("-");
         } else {
-            return null;
+            return rangeList;
         }
     }
 }

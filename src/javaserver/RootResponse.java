@@ -16,7 +16,7 @@ public class RootResponse extends AbstractResponse {
         return response.getBytes();
     }
 
-    public String getFile(RequestParser parser) throws IOException {
+    private String getFile(RequestParser parser) throws IOException {
         String bodyBegin = bodyBegin();
         String bodyEnd = bodyEnd();
         String uri = parser.getRequestURI();
@@ -32,14 +32,6 @@ public class RootResponse extends AbstractResponse {
         } else {
             return bodyBegin + getFileContents(DIRECTORY_PATH + "text-file.txt") + bodyEnd;
         }
-    }
-
-    private String listFiles(File[] files) {
-        String fileList = "";
-        for (File file : files) {
-            fileList += "<li><a href='" + file.getName() + "'>" + file.getName() + "</a></li>";
-        }
-        return fileList;
     }
 
     public String getFileContents(String filePath) {
@@ -66,4 +58,11 @@ public class RootResponse extends AbstractResponse {
         return builder.toString();
     }
 
+    private String listFiles(File[] files) {
+        String fileList = "";
+        for (File file : files) {
+            fileList += "<li><a href='" + file.getName() + "'>" + file.getName() + "</a></li>";
+        }
+        return fileList;
+    }
 }

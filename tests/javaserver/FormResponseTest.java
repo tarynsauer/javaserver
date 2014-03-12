@@ -40,7 +40,7 @@ public class FormResponseTest extends TestHelpers {
                 "Date: " + date +
                 "Server: Taryn's Java Server" +
                 "Content-Type: text/html" +
-                "<title>Taryn's Website</title><html><body>" +
+                "<html><title>Taryn's Website</title><body>" +
                 "<p data = " + dataValue + ">There may be a hidden name value here.</p></body>" +
                 "</html>";
         return response.getBytes();
