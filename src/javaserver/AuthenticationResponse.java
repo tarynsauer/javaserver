@@ -13,11 +13,11 @@ public class AuthenticationResponse extends AbstractResponse {
     byte[] getResponseMessage(RequestParser parser) throws IOException {
         String authentication = parser.getAuthentication();
         if (isValid(authentication)) {
-            String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody();
+            String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getContentTypeInfo(parser) + getBody();
             return response.getBytes();
         } else {
             String response = getStatusLine(UNAUTHORIZED) + getDateInfo()  + getAuthenticateHeader() +
-                    getServerInfo() + getContentTypeInfo("text/html") + getUnauthorizedBody();
+                    getServerInfo() + getContentTypeInfo(parser) + getUnauthorizedBody();
             return response.getBytes();
         }
     }

@@ -10,7 +10,7 @@ public class MethodOptionsResponse extends AbstractResponse {
     @Override
     byte[] getResponseMessage(RequestParser parser) throws IOException {
         String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getResponseHeaderAllows() +
-                getContentTypeInfo("text/html") + getBody();
+                getContentTypeInfo(parser) + getBody();
         return response.getBytes();
     }
 

@@ -21,12 +21,13 @@ public class Server {
 
     public void start() {
         openServerSocket();
+        int numConnections = 0;
 
         while(true) {
             Socket clientSocket = acceptClientConnection();
             BufferedReader input = getClientRequest(clientSocket);
 
-            System.out.println("New thread starting on port " + this.port);
+            System.out.println("Connection " + numConnections++ + " on port " + this.port);
 
             WorkerRunnable workerRunnable = new WorkerRunnable(clientSocket, directory, input);
             Thread thread = new Thread(workerRunnable);

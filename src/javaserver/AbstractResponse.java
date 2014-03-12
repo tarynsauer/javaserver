@@ -21,8 +21,8 @@ public abstract class AbstractResponse {
         return "Server: Taryn's Java Server\r\n";
     }
 
-    public String getContentTypeInfo(String contentType) {
-        return "Content-Type: " + contentType + "\r\n\r\n";
+    public String getContentTypeInfo(RequestParser parser) throws IOException {
+        return "Content-Type: " + getContentType(parser.getFileExtension()) + "\r\n\r\n";
     }
 
     public String bodyBegin() {
@@ -32,5 +32,20 @@ public abstract class AbstractResponse {
     public String bodyEnd() {
         return "</body></html>";
     }
+
+    private String getContentType(String fileExtension) {
+        if (fileExtension.equals(".txt")) {
+            return "text/plain";
+        } else if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg")) {
+            return "image/jpeg";
+        } else if (fileExtension.equals(".gif")) {
+            return "image/gif";
+        } else if (fileExtension.equals(".png")) {
+            return "image/png";
+        } else {
+            return "text/html";
+        }
+    }
+
 
 }

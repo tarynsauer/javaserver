@@ -8,7 +8,7 @@ import static javaserver.HTTPStatusConstants.NOT_FOUND;
 public class NotFoundResponse extends AbstractResponse {
 
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine(NOT_FOUND) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + pageNotFoundMessage(parser.getRequestURI());
+        String response = getStatusLine(NOT_FOUND) + getDateInfo() + getServerInfo() + getContentTypeInfo(parser) + pageNotFoundMessage(parser.getRequestURI());
         return response.getBytes();
     }
 

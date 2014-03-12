@@ -23,12 +23,12 @@ public class RootResponseTest extends TestHelpers {
                 "New thread starting on port 5000");
     }
 
-    private byte[] getMockRootResponse(String content) {
+    private byte[] getMockRootResponse(String contentType, String content) {
         String date = new Date().toString();
         String response = "HTTP/1.1 " + OK +
                 "Date: " + date +
                 "Server: Taryn's Java Server" +
-                "Content-Type: text/html" +
+                "Content-Type: " + contentType +
                 "<html><title>Taryn's Website</title><body>" +
                 content + "</body></html>";
         return response.getBytes();
@@ -50,7 +50,7 @@ public class RootResponseTest extends TestHelpers {
         setMockFileGetRequest("file1");
         byte[] output = new RootResponse().getResponseMessage(requestParser);
         String actualOutput = responseToString(output);
-        String expectedOutput = responseToString(getMockRootResponse("file1 contents"));
+        String expectedOutput = responseToString(getMockRootResponse("text/html", "file1 contents"));
         assertEquals(expectedOutput, actualOutput);
     }
 
@@ -59,7 +59,7 @@ public class RootResponseTest extends TestHelpers {
         setMockFileGetRequest("file2");
         byte[] output = new RootResponse().getResponseMessage(requestParser);
         String actualOutput = responseToString(output);
-        String expectedOutput = responseToString(getMockRootResponse("file2 contents"));
+        String expectedOutput = responseToString(getMockRootResponse("text/html", "file2 contents"));
         assertEquals(expectedOutput, actualOutput);
     }
 
@@ -68,7 +68,7 @@ public class RootResponseTest extends TestHelpers {
         setMockFileGetRequest("text-file.txt");
         byte[] output = new RootResponse().getResponseMessage(requestParser);
         String actualOutput = responseToString(output);
-        String expectedOutput = responseToString(getMockRootResponse("file1 contents"));
+        String expectedOutput = responseToString(getMockRootResponse("text/plain", "file1 contents"));
         assertEquals(expectedOutput, actualOutput);
     }
 
@@ -77,7 +77,7 @@ public class RootResponseTest extends TestHelpers {
         setMockFileGetRequest("");
         byte[] output = new RootResponse().getResponseMessage(requestParser);
         String actualOutput = responseToString(output);
-        String expectedOutput = responseToString(getMockRootResponse(getRootContents()));
+        String expectedOutput = responseToString(getMockRootResponse("text/html", getRootContents()));
         assertEquals(expectedOutput, actualOutput);
     }
 

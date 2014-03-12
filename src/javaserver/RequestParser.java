@@ -51,7 +51,6 @@ public class RequestParser {
                     map.put(mapPair[0], mapPair[1]);
                 }
             }
-
         }
         return map;
     }
@@ -101,6 +100,16 @@ public class RequestParser {
             return matcher.group(1);
         } else {
             return "/";
+        }
+    }
+
+    protected String getFileExtension() throws IOException {
+        String name = getRequestedFileName();
+        try {
+            return name.substring(name.lastIndexOf("."));
+
+        } catch (Exception e) {
+            return "";
         }
     }
 

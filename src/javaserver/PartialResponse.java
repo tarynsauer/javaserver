@@ -17,7 +17,7 @@ public class PartialResponse extends RootResponse {
         stringBuilder.append(getStatusLine(PARTIAL_RESPONSE));
         stringBuilder.append(getDateInfo());
         stringBuilder.append(getServerInfo());
-        stringBuilder.append(getContentTypeInfo("text/plain"));
+        stringBuilder.append(getContentTypeInfo(parser));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try {

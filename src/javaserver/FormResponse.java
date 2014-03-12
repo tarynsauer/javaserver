@@ -19,7 +19,7 @@ public class FormResponse extends AbstractResponse {
     @Override
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
         getAttribute(parser);
-        String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getBody();
+        String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getContentTypeInfo(parser) + getBody();
         return response.getBytes();
     }
 

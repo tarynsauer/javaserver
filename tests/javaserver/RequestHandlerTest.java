@@ -56,15 +56,4 @@ public class RequestHandlerTest extends TestHelpers {
         }
     }
 
-//    @Test
-//    public void testGetResponseForImageRequests() throws Exception {
-//        String[] files = {"image.jpeg", "image.png", "image.gif"};
-//        for (String file: files) {
-//            requestHandler.setImageResponse(new MockImageResponse());
-//            setMockRequest("GET /" + file + " HTTP/1.1--break--Connection: close--break--Host: localhost:5000--break----break----break--");
-//            String actualOutput = responseToString(requestHandler.getResponse());
-//            assertEquals(actualOutput, "ImageResponse getResponse() called");
-//        }
-//    }
-
 }

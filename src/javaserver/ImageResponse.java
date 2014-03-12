@@ -19,7 +19,7 @@ public class ImageResponse extends AbstractResponse {
         stringBuilder.append(getStatusLine(OK));
         stringBuilder.append(getDateInfo());
         stringBuilder.append(getServerInfo());
-        stringBuilder.append(getContentTypeInfo(contentType));
+        stringBuilder.append(getContentTypeInfo(parser));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try {

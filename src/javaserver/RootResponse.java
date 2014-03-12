@@ -12,7 +12,7 @@ public class RootResponse extends AbstractResponse {
 
     @Override
     public byte[] getResponseMessage(RequestParser parser) throws IOException {
-        String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getContentTypeInfo("text/html") + getFile(parser);
+        String response = getStatusLine(OK) + getDateInfo() + getServerInfo() + getContentTypeInfo(parser) + getFile(parser);
         return response.getBytes();
     }
 

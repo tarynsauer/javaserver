@@ -37,6 +37,7 @@ public class WorkerRunnable implements Runnable {
         output.write(response);
         output.close();
         input.close();
+        clientSocket.close();
     }
 
 }
