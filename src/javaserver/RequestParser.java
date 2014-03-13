@@ -24,6 +24,7 @@ public class RequestParser {
     public void setRequest(String request) {
         this.request = request;
     }
+
     public HashMap<String, String> getHeaders() throws IOException {
         String[] splitRequest = getRequest().split("--break--");
         HashMap <String, String> map = new HashMap<String, String>();

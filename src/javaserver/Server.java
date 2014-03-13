@@ -45,7 +45,7 @@ public class Server implements Runnable {
         return this.isStopped;
     }
 
-    public synchronized void stop(){
+    private synchronized void stop(){
         this.isStopped = true;
         try {
             this.serverSocket.close();

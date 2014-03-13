@@ -10,7 +10,7 @@ public class TestHelpers {
 
     public String responseToString(byte[] input) throws UnsupportedEncodingException {
         String expectedOutput = new String(input, "UTF-8");
-        return expectedOutput.replace("\n", "").replace("\r", "");
+        return normalizeString(expectedOutput);
     }
 
     public void setUpParserForResponseTesting() throws IOException {
@@ -18,6 +18,10 @@ public class TestHelpers {
         InputStream input = new ByteArrayInputStream(data);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
         requestParser = new RequestParser(bufferedReader);
+    }
+
+    public String normalizeString(String input) {
+        return input.replace("\n", "").replace("\r", "");
     }
 
 }
