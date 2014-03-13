@@ -20,5 +20,12 @@ public class TestHelpers {
         requestParser = new RequestParser(bufferedReader);
     }
 
+    public String expectedRequestResponse(String request) throws IOException {
+        setUpParserForResponseTesting();
+        requestParser.setRequest(request);
+        RequestHandler rh = new RequestHandler(requestParser);
+        return new String(rh.getResponse(), "UTF-8");
+    }
+
 }
 
