@@ -30,11 +30,6 @@ public class RequestManager {
         }
     }
 
-//    public String getResponseHeaders() {
-//    Authentication header
-//    Method Options header
-//    }
-
     public String getStatus() {
       if (redirect()) {
           return MOVED_PERMANENTLY;
@@ -62,7 +57,7 @@ public class RequestManager {
     }
 
     private boolean partialContentRequest() {
-        return containsHeader("Range");
+        return parser.containsHeader("Range");
     }
 
     private boolean redirect() {
@@ -84,15 +79,9 @@ public class RequestManager {
     }
 
     protected String getContents() {
+        // Get bodymiddle based on uri from SiteManager
+        //
         return null;
-    }
-
-    protected boolean containsHeader(String headerName) {
-        return parser.getHeaders().containsKey(headerName);
-    }
-
-    protected String getHeader(String headerName) {
-        return parser.getHeaders().get(headerName);
     }
 
     protected boolean methodOptionsRequired() {

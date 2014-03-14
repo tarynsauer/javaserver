@@ -136,4 +136,35 @@ public class RequestParser {
     private String normalizeString(String input) {
         return input.replace("\n", "").replace("\r", "");
     }
+
+
+    protected boolean containsHeader(String headerName) {
+        return getHeaders().containsKey(headerName);
+    }
+
+    protected String getHeader(String headerName) {
+        return getHeaders().get(headerName);
+    }
+
+    public int getBeginRange() throws IOException {
+        return Integer.parseInt(getRange()[0]);
+    }
+
+    public int getEndRange() throws IOException {
+        return (Integer.parseInt(getRange()[1]));
+    }
+
+    public String[] getRange() throws IOException {
+        String rangeParts = getHeader("Range");
+        if (rangeParts == null) {
+            return null;
+        }
+
+        String[] rangeList = rangeParts.split("=");
+        if (rangeList.length > 1) {
+            return rangeList[1].split("-");
+        } else {
+            return rangeList;
+        }
+    }
 }

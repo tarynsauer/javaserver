@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -105,4 +106,25 @@ public class RequestParserTest extends TestHelpers {
     public void testGetParamsGetsKey() throws Exception {
         assertTrue(requestParser.getParams().containsKey("data"));
     }
+
+    @Test
+    public void testContainsHeaderReturnsTrueWhenHeaderPresent() throws Exception {
+        assertTrue(requestParser.containsHeader("Content-Length"));
+    }
+
+    @Test
+    public void testContainsHeaderReturnsFalseWhenHeaderNotPresent() throws Exception {
+        assertFalse(requestParser.containsHeader("Range"));
+    }
+
+    @Test
+    public void testGetHeaderReturnsHeaderValueWhenPresent() throws Exception {
+        assertEquals(requestParser.getHeader("Content-Length"), "15");
+    }
+
+    @Test
+    public void testGetHeaderReturnsNullValueWhenNotPresent() throws Exception {
+        assertEquals(requestParser.getHeader("Range"), null);
+    }
+
 }

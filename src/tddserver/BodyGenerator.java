@@ -2,6 +2,7 @@ package tddserver;
 
 import java.io.*;
 
+import static java.util.Arrays.copyOfRange;
 import static javaserver.JavaserverConstants.DIRECTORY_PATH;
 
 /**
@@ -14,13 +15,15 @@ public class BodyGenerator {
         this.parser = parser;
     }
 
-    public byte[] addBodyToResponse(StringBuilder builder, String bodyContents) {
+    public byte[] addBodyToResponse(StringBuilder builder, String bodyContents) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         if (parser.getFileExtension().equals("text/plain")) {
             getFileContents(builder);
         } else if (parser.getFileExtension().startsWith("image/")) {
             writeImageToResponse(outputStream, builder);
+        } else if (parser.containsHeader("Range")) {
+            getPartialResponse(builder);
         } else {
             builder.append(displayBody(bodyContents));
         }
@@ -74,6 +77,15 @@ public class BodyGenerator {
 
     private String displayBody(String bodyContents) {
         return "<html><title>Taryn's Website</title><body>" + bodyContents + "</body></html>";
+    }
+
+    private byte[] getPartialResponse(StringBuilder builder) throws IOException {
+        byte[] contents = getFileContents(builder).getBytes();
+        if (parser.getRange() == null) {
+            return contents;
+        } else {
+            return copyOfRange(contents, parser.getBeginRange(), parser.getEndRange());
+        }
     }
 
 }

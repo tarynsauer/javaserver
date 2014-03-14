@@ -28,6 +28,18 @@ public class ResponseGenerator {
         return bodyGenerator.addBodyToResponse(builder, manager.getContents());
     }
 
+    public String displayResponseHeaders() {
+        if (manager.getStatus().equals(UNAUTHORIZED)) {
+            return "WWW-Authenticate: Basic realm=\"Authentication required for Logs\"\r\n";
+        } else if (manager.getStatus().equals(MOVED_PERMANENTLY)) {
+            return "Location: http://localhost:" + Integer.toString(DEFAULT_PORT) + manager.getRedirect() +"\r\n";
+        } else if (manager.methodOptionsRequired()) {
+            return "Allow: " + manager.getAllowedOptionsList() + "\r\n";
+        } else {
+            return "";
+        }
+    }
+
     private static String displayStatus(String status) {
         return "HTTP/1.1 " + status +  "\r\n";
     }
@@ -43,17 +55,5 @@ public class ResponseGenerator {
 
     private String displayContentType() throws IOException {
         return "Content-Type: " + manager.getContentType() + "\r\n\r\n";
-    }
-
-    public String displayResponseHeaders() {
-        if (manager.getStatus().equals(UNAUTHORIZED)) {
-            return "WWW-Authenticate: Basic realm=\"Authentication required for Logs\"\r\n";
-        } else if (manager.getStatus().equals(MOVED_PERMANENTLY)) {
-            return "Location: http://localhost:" + Integer.toString(DEFAULT_PORT) + manager.getRedirect() +"\r\n";
-        } else if (manager.methodOptionsRequired()) {
-            return "Allow: " + manager.getAllowedOptionsList() + "\r\n";
-        } else {
-            return "";
-        }
     }
 }

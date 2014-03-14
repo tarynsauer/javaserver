@@ -29,26 +29,6 @@ public class RequestManagerTest {
     }
 
     @Test
-    public void testContainsHeaderReturnsTrueWhenHeaderPresent() throws Exception {
-        assertTrue(manager.containsHeader("Content-Length"));
-    }
-
-    @Test
-    public void testContainsHeaderReturnsFalseWhenHeaderNotPresent() throws Exception {
-        assertFalse(manager.containsHeader("Range"));
-    }
-
-    @Test
-    public void testGetHeaderReturnsHeaderValueWhenPresent() throws Exception {
-        assertEquals(manager.getHeader("Content-Length"), "15");
-    }
-
-    @Test
-    public void testGetHeaderReturnsNullValueWhenNotPresent() throws Exception {
-        assertEquals(manager.getHeader("Range"), null);
-    }
-
-    @Test
     public void testGetStatusReturnsRedirect() throws Exception {
         assertEquals(manager.getStatus(), OK);
     }
