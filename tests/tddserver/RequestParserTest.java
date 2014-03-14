@@ -11,9 +11,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by Taryn on 3/12/14.
@@ -23,6 +21,14 @@ public class RequestParserTest extends TestHelpers {
 
     private void mockPutFormRequest() throws Exception {
         String str = "PUT /form HTTP/1.1\r\nConnection: close\r\nHost: localhost:5000\r\nContent-Length: 15\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n\r\ndata=heathcliff";
+        byte[] data = str.getBytes();
+        InputStream input = new ByteArrayInputStream(data);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
+        requestParser = new tddserver.RequestParser(bufferedReader);
+    }
+
+    private void mockParametersRequest() throws Exception {
+        String str = "GET /parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff HTTP/1.1\r\nConnection: close\r\nHost: localhost:5000\r\n\r\n\r\n";
         byte[] data = str.getBytes();
         InputStream input = new ByteArrayInputStream(data);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
@@ -63,6 +69,12 @@ public class RequestParserTest extends TestHelpers {
     @Test
     public void testGetUri() throws Exception {
         assertEquals("/form", requestParser.getUri());
+    }
+
+    @Test
+    public void testGetUriForParameters() throws Exception {
+        mockParametersRequest();
+        assertEquals("/parameters", requestParser.getUri());
     }
 
     @Test
@@ -125,6 +137,19 @@ public class RequestParserTest extends TestHelpers {
     @Test
     public void testGetHeaderReturnsNullValueWhenNotPresent() throws Exception {
         assertEquals(requestParser.getHeader("Range"), null);
+    }
+
+    @Test
+    public void testGetQueryStringReturnsParameterString() throws Exception {
+        mockParametersRequest();
+        assertEquals(requestParser.getQueryString(), "variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff HTTP/1.1--break--Connection: close--break--Host: localhost:5000--break----break----break--");
+    }
+
+    @Test
+    public void testGetAllVariablesReturnsDecodedParameters() throws Exception {
+        mockParametersRequest();
+        String[] expectedResult = {"variable_1 = Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F", "variable_2 = stuff"};
+        assertArrayEquals(requestParser.getAllVariables(), expectedResult);
     }
 
 }

@@ -10,13 +10,8 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Taryn on 3/13/14.
  */
-public class ResponseGeneratorTest {
+public class ResponseGeneratorTest extends TestHelpers {
     private ResponseGenerator generator;
-
-    @Before
-    public void setUp() throws Exception {
-        setRequestString("PUT /form HTTP/1.1\r\nConnection: close\r\nHost: localhost:5000\r\nContent-Length: 15\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n\r\ndata=heathcliff");
-    }
 
     private void setRequestString(String str) throws IOException {
         byte[] data = str.getBytes();
@@ -24,6 +19,11 @@ public class ResponseGeneratorTest {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
         RequestParser parser = new RequestParser(bufferedReader);
         generator = new ResponseGenerator(parser);
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        setRequestString("PUT /form HTTP/1.1\r\nConnection: close\r\nHost: localhost:5000\r\nContent-Length: 15\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n\r\ndata=heathcliff");
     }
 
     @Test
@@ -42,5 +42,26 @@ public class ResponseGeneratorTest {
     public void testDisplayResponseHeadersReturnsMethodOptionsHeader() throws Exception {
         setRequestString("OPTIONS /method_options HTTP/1.1\r\nConnection: close\r\nHost: localhost:5000\r\n\r\n\r\n");
         assertEquals(generator.displayResponseHeaders(), "Allow: GET,HEAD,POST,OPTIONS,PUT\r\n");
+    }
+
+    private String expectedRootResponse() {
+        return "HTTP/1.1 200 OK" +
+        "Date: " + getDate() +
+        "Server: Taryn's Java Server" +
+        "Content-Type: text/html" +
+        "<html><title>Taryn's Website</title><body><h1>Hey, there!</h1>" +
+        "<li><a href='file1'>file1</a></li><li><a href='file2'>file2</a></li>" +
+        "<li><a href='image.gif'>image.gif</a></li>" +
+        "<li><a href='image.jpeg'>image.jpeg</a></li>" +
+        "<li><a href='image.png'>image.png</a></li>" +
+        "<li><a href='partial_content.txt'>partial_content.txt</a></li>" +
+        "<li><a href='text-file.txt'>text-file.txt</a></li></body></html>";
+    }
+
+    @Test
+    public void testGetResponseMessage() throws Exception {
+        setRequestString("GET / HTTP/1.1\r\nConnection: close\r\nHost: localhost:5000\r\n\r\n\r\n");
+        String actual = new String(generator.getResponseMessage(requestParser), "UTF-8");
+        assertEquals(normalizeString(actual), normalizeString(expectedRootResponse()));
     }
 }

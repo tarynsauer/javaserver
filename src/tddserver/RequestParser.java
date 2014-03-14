@@ -26,6 +26,8 @@ public class RequestParser {
 
     public String getRequest() { return this.request; }
 
+    public void setRequest(String request) { this.request = request; }
+
     public String getMethod() { return this.method; }
 
     public String getUri() { return this.uri; }
@@ -167,4 +169,29 @@ public class RequestParser {
             return rangeList;
         }
     }
+
+    protected String[] getAllVariables() {
+        String queryString = getQueryString();
+        String[] queries = queryString.split("=");
+        String queryParts = "";
+        for(String s : queries) {
+            queryParts += s;
+            queryParts += " = ";
+        }
+        String[] variables = queryParts.split("&");
+        variables[variables.length - 1] = variables[variables.length - 1].split(" HTTP/1.1")[0];
+        return variables;
+    }
+
+    protected String getQueryString() {
+        String match = null;
+        Pattern pattern = Pattern.compile("\\?(.*)");
+        Matcher matcher = pattern.matcher(getRequest());
+
+        if (matcher.find()) {
+            match = matcher.group(1);
+        }
+        return match;
+    }
+
 }

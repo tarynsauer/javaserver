@@ -3,6 +3,7 @@ package tddserver;
 import java.util.Arrays;
 
 import static javaserver.HTTPStatusConstants.*;
+
 /**
  * Created by Taryn on 3/12/14.
  */
@@ -13,21 +14,6 @@ public class RequestManager {
     public RequestManager(RequestParser parser) {
         this.parser = parser;
         this.site = new SiteManager();
-    }
-
-    public String getContentType() {
-        String ext = parser.getFileExtension();
-        if (ext.equals(".txt")) {
-            return "text/plain";
-        } else if (ext.equals(".jpg") || ext.equals(".jpeg")) {
-            return "image/jpeg";
-        } else if (ext.equals(".gif")) {
-            return "image/gif";
-        } else if (ext.equals(".png")) {
-            return "image/png";
-        } else {
-            return "text/html";
-        }
     }
 
     public String getStatus() {
@@ -76,12 +62,6 @@ public class RequestManager {
             }
         }
         return false;
-    }
-
-    protected String getContents() {
-        // Get bodymiddle based on uri from SiteManager
-        //
-        return null;
     }
 
     protected boolean methodOptionsRequired() {

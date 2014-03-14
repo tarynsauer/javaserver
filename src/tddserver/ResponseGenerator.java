@@ -25,10 +25,10 @@ public class ResponseGenerator {
         builder.append(displayResponseHeaders());
         builder.append(displayContentType());
 
-        return bodyGenerator.addBodyToResponse(builder, manager.getContents());
+        return bodyGenerator.addBodyToResponse(builder);
     }
 
-    public String displayResponseHeaders() {
+    protected String displayResponseHeaders() {
         if (manager.getStatus().equals(UNAUTHORIZED)) {
             return "WWW-Authenticate: Basic realm=\"Authentication required for Logs\"\r\n";
         } else if (manager.getStatus().equals(MOVED_PERMANENTLY)) {
@@ -54,6 +54,6 @@ public class ResponseGenerator {
     }
 
     private String displayContentType() throws IOException {
-        return "Content-Type: " + manager.getContentType() + "\r\n\r\n";
+        return "Content-Type: " + bodyGenerator.getContentType() + "\r\n\r\n";
     }
 }

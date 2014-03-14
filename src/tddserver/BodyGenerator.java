@@ -1,6 +1,8 @@
 package tddserver;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.copyOfRange;
 import static javaserver.JavaserverConstants.DIRECTORY_PATH;
@@ -10,24 +12,52 @@ import static javaserver.JavaserverConstants.DIRECTORY_PATH;
  */
 public class BodyGenerator {
     private RequestParser parser;
+    private static List<Page> pages = new ArrayList<Page>();
 
     public BodyGenerator(RequestParser parser) {
+        generateSitePages();
         this.parser = parser;
     }
 
-    public byte[] addBodyToResponse(StringBuilder builder, String bodyContents) throws IOException {
+    public List<Page> getPages() {
+        return pages;
+    }
+
+    public byte[] addBodyToResponse(StringBuilder builder) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        if (parser.getFileExtension().equals("text/plain")) {
-            getFileContents(builder);
-        } else if (parser.getFileExtension().startsWith("image/")) {
-            writeImageToResponse(outputStream, builder);
-        } else if (parser.containsHeader("Range")) {
+        if ((parser.containsHeader("Range"))) {
             getPartialResponse(builder);
+        } else if (getContentType().equals("text/plain") || isFile()) {
+            getFileContents(builder);
+        } else if (getContentType().startsWith("image/")) {
+            writeImageToResponse(outputStream, builder);
         } else {
-            builder.append(displayBody(bodyContents));
+            builder.append(displayBody());
         }
+        outputStream.write(builder.toString().getBytes());
+        outputStream.close();
         return outputStream.toByteArray();
+    }
+
+    public boolean isFile() {
+        String name = parser.getFileName();
+        return (name.equals("file1") || name.equals("file2"));
+    }
+
+    public String getContentType() {
+        String ext = parser.getFileExtension();
+        if (ext.equals(".txt")) {
+            return "text/plain";
+        } else if (ext.equals(".jpg") || ext.equals(".jpeg")) {
+            return "image/jpeg";
+        } else if (ext.equals(".gif")) {
+            return "image/gif";
+        } else if (ext.equals(".png")) {
+            return "image/png";
+        } else {
+            return "text/html";
+        }
     }
 
     private OutputStream writeImageToResponse(OutputStream outputStream, StringBuilder builder) {
@@ -75,8 +105,8 @@ public class BodyGenerator {
         return builder.toString();
     }
 
-    private String displayBody(String bodyContents) {
-        return "<html><title>Taryn's Website</title><body>" + bodyContents + "</body></html>";
+    private String displayBody() throws UnsupportedEncodingException {
+        return "<html><title>Taryn's Website</title><body>" + getPageBody() + "</body></html>";
     }
 
     private byte[] getPartialResponse(StringBuilder builder) throws IOException {
@@ -86,6 +116,39 @@ public class BodyGenerator {
         } else {
             return copyOfRange(contents, parser.getBeginRange(), parser.getEndRange());
         }
+    }
+
+    private String getPageBody() throws UnsupportedEncodingException {
+        List<Page> pagesList = getPages();
+        for(Page page : pagesList) {
+            String uri = page.getUri();
+            if (uri.equals(parser.getUri())) {
+                return page.getContent(parser);
+            }
+        }
+        return "";
+    }
+
+    private void generateSitePages() {
+        RootPage root = new RootPage("/");
+        pages.add(root);
+        LogsPage logs = new LogsPage("/logs");
+        pages.add(logs);
+        addPage("/method_options", "<h1>These are your options</h1>");
+        addPage("/log", "<h1>Log</h1><p>Logging...</p>");
+        addPage("/these", "<h1>These</h1><p>Logging...</p>");
+        addPage("/requests", "<h1>Requests</h1><p>Logging...</p>");
+        addPage("/foobar", "<h1>404 Not Found</h1><p>We don't know what you're looking for.</p>");
+        ParametersPage paramsPage = new ParametersPage("/parameters");
+        pages.add(paramsPage);
+        FormPage form = new FormPage("/form");
+        pages.add(form);
+    }
+
+    private void addPage(String uri, String content) {
+        Page page = new Page(uri);
+        page.setContent(content);
+        pages.add(page);
     }
 
 }
