@@ -8,9 +8,14 @@ import java.net.Socket;
  */
 public class WorkerRunnable implements Runnable {
     protected Socket clientSocket = null;
+    protected BufferedReader input = null;
 
     public WorkerRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket;
+    }
+
+    public void setInput(BufferedReader clientRequest) {
+        this.input = clientRequest;
     }
 
     public void run() {

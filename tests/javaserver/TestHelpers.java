@@ -24,5 +24,11 @@ public class TestHelpers {
         return input.replace("\n", "").replace("\r", "");
     }
 
-}
+    public String expectedRequestResponse(String request) throws IOException {
+        setUpParserForResponseTesting();
+        requestParser.setRequest(request);
+        RequestHandler rh = new RequestHandler(requestParser);
+        return new String(rh.getResponse(), "UTF-8");
+    }
 
+}
