@@ -27,9 +27,10 @@ public class BodyGenerator {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         if ((parser.containsHeader("Range"))) {
-            getPartialResponse(builder);
+            byte[] partialResponse = getPartialResponse(builder);
+            outputStream.write(partialResponse);
         } else if (getContentType().equals("text/plain") || isFile()) {
-            getFileContents(builder);
+            builder = getFileContents(builder);
         } else if (getContentType().startsWith("image/")) {
             writeImageToResponse(outputStream, builder);
         } else {
@@ -84,7 +85,7 @@ public class BodyGenerator {
         return fileData;
     }
 
-    private String getFileContents(StringBuilder builder) {
+    private StringBuilder getFileContents(StringBuilder builder) {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(DIRECTORY_PATH + parser.getFileName());
@@ -102,7 +103,7 @@ public class BodyGenerator {
                 ex.printStackTrace();
             }
         }
-        return builder.toString();
+        return builder;
     }
 
     private String displayBody() throws UnsupportedEncodingException {
@@ -110,7 +111,7 @@ public class BodyGenerator {
     }
 
     private byte[] getPartialResponse(StringBuilder builder) throws IOException {
-        byte[] contents = getFileContents(builder).getBytes();
+        byte[] contents = getFileContents(builder).toString().getBytes();
         if (parser.getRange() == null) {
             return contents;
         } else {
